@@ -4,45 +4,71 @@
     android:viewportWidth="200"
     android:viewportHeight="200">
 
-    <!-- Minimalist Architect with Blueprint - Clean B&W -->
+    <!-- Minimalist Architect with Blueprint Icon - B&W -->
 
-    <!-- Person head -->
+    <!-- Person/Head -->
     <path
         android:fillColor="#000000"
-        android:pathData="M85,45 m-12,0 a12,12 0,1,1 24,0 a12,12 0,1,1 -24,0"/>
+        android:pathData="M70,50 m-10,0 a10,10 0,1,1 20,0 a10,10 0,1,1 -20,0"/>
 
-    <!-- Person body/torso -->
+    <!-- Hard hat -->
     <path
         android:fillColor="#000000"
-        android:pathData="M75,60 L75,95 L95,95 L95,60 Q95,57 85,57 Q75,57 75,60 Z"/>
+        android:pathData="M60,43 L80,43 L80,50 L60,50 Z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M58,38 Q70,35 82,38 L82,43 L58,43 Z"/>
 
-    <!-- Blueprint/paper being held -->
+    <!-- Body/Shoulders -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M60,63 Q60,60 70,60 Q80,60 80,63 L80,90 L60,90 Z"/>
+
+    <!-- Blueprint/Document being held -->
+    <!-- Paper/blueprint rectangle -->
     <path
         android:fillColor="#FFFFFF"
         android:strokeColor="#000000"
         android:strokeWidth="2"
-        android:pathData="M95,70 L145,70 L145,120 L95,120 Z"/>
+        android:pathData="M85,65 L150,65 L150,135 L85,135 Z"/>
 
-    <!-- Blueprint lines (horizontal) -->
+    <!-- Blueprint grid lines (horizontal) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.8"
+        android:pathData="M90,75 L145,75 M90,85 L145,85 M90,95 L145,95 M90,105 L145,105 M90,115 L145,115 M90,125 L145,125"/>
+
+    <!-- Blueprint grid lines (vertical) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="0.8"
+        android:pathData="M95,70 L95,130 M105,70 L105,130 M115,70 L115,130 M125,70 L125,130 M135,70 L135,130"/>
+
+    <!-- Small blueprint detail (simple building/floor plan) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="1.5"
+        android:fillColor="#FFFFFF"
+        android:pathData="M110,90 L110,110 L130,110 L130,90 Z"/>
     <path
         android:strokeColor="#000000"
         android:strokeWidth="1"
-        android:pathData="M100,80 L140,80 M100,90 L140,90 M100,100 L130,100 M100,110 L135,110"/>
+        android:pathData="M110,100 L130,100"/>
 
     <!-- Arms holding blueprint -->
+    <!-- Left arm -->
     <path
         android:fillColor="#000000"
-        android:pathData="M75,65 L70,75 L65,80 L70,85 L85,75 Z"/>
+        android:pathData="M60,65 L55,75 L50,80 L55,85 L68,75 Z"/>
+    <!-- Right arm extending to blueprint -->
     <path
         android:fillColor="#000000"
-        android:pathData="M95,65 L100,70 L145,70 L145,75 L100,75 L95,70 Z"/>
+        android:pathData="M80,65 L85,68 L85,135 L80,132 Z"/>
 
-    <!-- Hard hat on head (optional detail) -->
+    <!-- Pencil/pen in left hand (optional detail) -->
     <path
-        android:fillColor="#000000"
-        android:pathData="M73,38 L97,38 L97,45 L73,45 Z"/>
-    <path
-        android:fillColor="#000000"
-        android:pathData="M75,33 Q85,28 95,33 L95,38 L75,38 Z"/>
+        android:strokeColor="#000000"
+        android:strokeWidth="1.5"
+        android:pathData="M50,80 L45,85"/>
 
 </vector>
