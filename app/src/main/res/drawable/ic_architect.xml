@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Minimalist Architect with Blueprint - Clean B&W -->
+
+    <!-- Person head -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M85,45 m-12,0 a12,12 0,1,1 24,0 a12,12 0,1,1 -24,0"/>
+
+    <!-- Person body/torso -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M75,60 L75,95 L95,95 L95,60 Q95,57 85,57 Q75,57 75,60 Z"/>
+
+    <!-- Blueprint/paper being held -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:pathData="M95,70 L145,70 L145,120 L95,120 Z"/>
+
+    <!-- Blueprint lines (horizontal) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="1"
+        android:pathData="M100,80 L140,80 M100,90 L140,90 M100,100 L130,100 M100,110 L135,110"/>
+
+    <!-- Arms holding blueprint -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M75,65 L70,75 L65,80 L70,85 L85,75 Z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M95,65 L100,70 L145,70 L145,75 L100,75 L95,70 Z"/>
+
+    <!-- Hard hat on head (optional detail) -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M73,38 L97,38 L97,45 L73,45 Z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M75,33 Q85,28 95,33 L95,38 L75,38 Z"/>
+
+</vector>

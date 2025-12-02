@@ -13,7 +13,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView emailText;
     private EditText nameInput, phoneInput;
-    private Button updateButton, backButton;
+    private TextView updateButton, backButton;
     private DatabaseHelper databaseHelper;
     private String userEmail;
 

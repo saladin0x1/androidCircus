@@ -4,33 +4,28 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <ImageView
-        android:id="@+id/splashIcon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_medical"
-        android:contentDescription="Medical Cabinet Logo" />
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/splashIcon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Cabinet Médical"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_medical"
+            android:contentDescription="Medical Cabinet Logo"
+            android:alpha="0.95" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:text="Gestion de Rendez-vous"
-        android:textColor="#666666"
-        android:textSize="14sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Cabinet Médical"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
 
 </RelativeLayout>

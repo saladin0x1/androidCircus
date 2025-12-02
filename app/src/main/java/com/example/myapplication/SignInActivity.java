@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SignInActivity extends AppCompatActivity {
 
     private EditText emailInput, passwordInput;
-    private Button signInButton;
+    private TextView signInButton;
     private TextView signUpLink;
     private DatabaseHelper databaseHelper;
 

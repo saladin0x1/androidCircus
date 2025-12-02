@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView welcomeText;
-    private Button profileButton, logoutButton;
+    private TextView profileButton, logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
