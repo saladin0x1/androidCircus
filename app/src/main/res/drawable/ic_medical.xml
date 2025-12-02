@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    <!-- Medical Cross - Minimalist B&W -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M80,40 L120,40 L120,80 L160,80 L160,120 L120,120 L120,160 L80,160 L80,120 L40,120 L40,80 L80,80 Z"/>
+</vector>

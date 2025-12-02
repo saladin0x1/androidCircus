@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Mon Profil"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Retour"
+                android:textSize="14sp"
+                android:backgroundTint="#666666"
+                android:textColor="#FFFFFF"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </LinearLayout>
+
+        <!-- Profile Icon -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_profile"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:contentDescription="Profile Icon" />
+
+        <!-- Email (read-only) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="email@example.com"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:padding="16dp"
+            android:background="@android:drawable/edit_text"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom complet"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Votre nom"
+            android:inputType="textPersonName"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#999999" />
+
+        <!-- Phone -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Téléphone"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/phoneInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Votre numéro de téléphone"
+            android:inputType="phone"
+            android:padding="16dp"
+            android:layout_marginBottom="32dp"
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#999999" />
+
+        <!-- Update Button -->
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mettre à jour le profil"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:backgroundTint="#000000"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

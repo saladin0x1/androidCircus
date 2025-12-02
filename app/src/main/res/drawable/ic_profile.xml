@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Profile/User Icon - Minimalist B&W -->
+    <!-- Head -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M50,25 m-15,0 a15,15 0,1,1 30,0 a15,15 0,1,1 -30,0"/>
+    <!-- Body -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M50,45 Q30,45 20,65 L20,80 L80,80 L80,65 Q70,45 50,45 Z"/>
+</vector>

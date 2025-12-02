@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    <!-- Construction Worker/Hard Hat - Minimalist B&W -->
+    <!-- Hard hat -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M60,80 Q60,50 100,50 Q140,50 140,80 L140,95 L60,95 Z"/>
+    <!-- Brim -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M50,95 L150,95 L150,105 L50,105 Z"/>
+    <!-- Body/Shoulders -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M70,105 L70,140 L85,140 L85,160 L115,160 L115,140 L130,140 L130,105 Z"/>
+    <!-- Tool/Hammer in hand -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M130,135 L160,135 L160,145 L130,145 Z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M155,130 L165,130 L165,150 L155,150 Z"/>
+</vector>

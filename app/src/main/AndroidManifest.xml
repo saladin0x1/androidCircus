@@ -11,14 +11,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+
+        <!-- Splash Screen (Launcher) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Sign In -->
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false" />
+
+        <!-- Sign Up -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+
+        <!-- Home -->
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
+        <!-- Profile -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <!-- Old MainActivity (kept for reference) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
