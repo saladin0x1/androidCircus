@@ -18,3 +18,4 @@ Cloner le dépôt et ouvrir le projet dans Android Studio :
 ```bash
 git clone https://github.com/Ramiu88/androidCircus.git
 cd androidCircus
+```
