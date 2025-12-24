@@ -1,28 +1,26 @@
 package com.example.myapplication;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.api.SessionManager;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView emailText;
     private EditText nameInput, phoneInput;
     private TextView updateButton, backButton;
-    private DatabaseHelper databaseHelper;
-    private String userEmail;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        databaseHelper = new DatabaseHelper(this);
+        sessionManager = new SessionManager(this);
 
         emailText = findViewById(R.id.emailText);
         nameInput = findViewById(R.id.nameInput);
@@ -30,30 +28,16 @@ public class ProfileActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.updateButton);
         backButton = findViewById(R.id.backButton);
 
-        // Get user email from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("MedicalCabinetPrefs", MODE_PRIVATE);
-        userEmail = prefs.getString("userEmail", "");
-
-        // Load user data
-        loadUserData();
+        // Load user data from session
+        emailText.setText(sessionManager.getUserEmail());
+        nameInput.setText(sessionManager.getUserName());
+        // Phone is not stored in session yet, leave blank
+        phoneInput.setText(""); 
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = nameInput.getText().toString().trim();
-                String phone = phoneInput.getText().toString().trim();
-
-                if (name.isEmpty()) {
-                    Toast.makeText(ProfileActivity.this, "Le nom ne peut pas être vide", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                boolean success = databaseHelper.updateUser(userEmail, name, phone);
-                if (success) {
-                    Toast.makeText(ProfileActivity.this, "Profil mis à jour avec succès", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ProfileActivity.this, "Erreur lors de la mise à jour", Toast.LENGTH_SHORT).show();
-                }
+                 Toast.makeText(ProfileActivity.this, "Mise à jour via API bientôt disponible", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -63,14 +47,5 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void loadUserData() {
-        User user = databaseHelper.getUserByEmail(userEmail);
-        if (user != null) {
-            emailText.setText(user.getEmail());
-            nameInput.setText(user.getName());
-            phoneInput.setText(user.getPhone() != null ? user.getPhone() : "");
-        }
     }
 }

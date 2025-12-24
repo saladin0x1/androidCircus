@@ -1,10 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.api.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -18,13 +18,18 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Check if user is already logged in
-                SharedPreferences prefs = getSharedPreferences("MedicalCabinetPrefs", MODE_PRIVATE);
-                boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
-
+                SessionManager sessionManager = new SessionManager(SplashActivity.this);
+                
                 Intent intent;
-                if (isLoggedIn) {
-                    intent = new Intent(SplashActivity.this, HomeActivity.class);
+                if (sessionManager.isLoggedIn()) {
+                    String role = sessionManager.getUserRole();
+                    if ("Doctor".equalsIgnoreCase(role)) {
+                        intent = new Intent(SplashActivity.this, DoctorHomeActivity.class);
+                    } else if ("Clerk".equalsIgnoreCase(role)) {
+                        intent = new Intent(SplashActivity.this, ClerkHomeActivity.class);
+                    } else {
+                        intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    }
                 } else {
                     intent = new Intent(SplashActivity.this, SignInActivity.class);
                 }
