@@ -228,7 +228,7 @@ curl http://your-vps-ip:5000/api/health
 # Test login
 curl -X POST http://your-vps-ip:5000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"clerk@clinic.com","password":"Clerk123!"}'
+  -d '{"email":"clerk@clinic.com","password":"Password123!"}'
 ```
 
 ### From Android phone:

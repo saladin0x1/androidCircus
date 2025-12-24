@@ -261,14 +261,14 @@ Domain/Enums/
 ### Admin/Clerk User
 ```
 Email: clerk@clinic.com
-Password: Clerk123!
+Password: Password123!
 Role: Clerk
 ```
 
 ### Sample Doctor
 ```
 Email: doctor@clinic.com
-Password: Doctor123!
+Password: Password123!
 Role: Doctor
 Specialization: General Practitioner
 ```
@@ -276,7 +276,7 @@ Specialization: General Practitioner
 ### Sample Patient
 ```
 Email: patient@clinic.com
-Password: Patient123!
+Password: Password123!
 Role: Patient
 ```
 
