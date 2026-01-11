@@ -20,12 +20,21 @@ Elle est conçue pour organiser, planifier et suivre les rendez-vous des patient
 - [x] Appointment management (Create, Read, Complete, Cancel)
 - [x] Doctor listing
 - [x] Clerk dashboard with statistics
+- [x] Patient details endpoint (GET /api/patients/{id})
+- [x] Patient notes endpoint (GET/PUT /api/patients/{id}/notes)
+- [x] Factory pattern database seeding with Bogus
+- [x] Request logging middleware
+- [x] Global exception handler middleware
 
 ### Android UI
 - [x] User authentication (Sign in/Sign up)
 - [x] Role-based navigation (Patient, Doctor, Clerk)
 - [x] Patient: Create and view appointments
 - [x] Doctor: View and complete appointments
+- [x] Doctor: View patients list with search
+- [x] Doctor: Patient dossier with tabs (Info, History, Notes)
+- [x] Doctor: Agenda with calendar view
+- [x] Doctor: Add/edit patient notes
 - [x] Clerk: Dashboard with real-time statistics
 - [x] Session management with JWT
 - [x] Native notifications
@@ -42,7 +51,6 @@ Elle est conçue pour organiser, planifier et suivre les rendez-vous des patient
 - [ ] `PUT /api/users/password` - Change password
 
 #### Patient Management
-- [ ] `GET /api/patients/{id}` - Get patient details (DOB, address, emergency contact)
 - [ ] `PUT /api/patients/{id}` - Update patient profile
 
 #### Doctor Management
@@ -58,9 +66,6 @@ Elle est conçue pour organiser, planifier et suivre les rendez-vous des patient
 - [ ] `GET /api/clerk/doctors` - List all doctors (with management capabilities)
 - [ ] `POST /api/clerk/doctors` - Add new doctor
 - [ ] `PUT /api/users/{id}/active` - Activate/deactivate users
-
-#### Security Fixes
-- [ ] Add `[Authorize]` attribute to `DoctorsController` (currently unprotected)
 
 ---
 
@@ -117,11 +122,9 @@ cd androidCircus
 
 ### Known Issues
 - Client-side role switching is vulnerable on rooted devices (UI only, backend is protected)
-- `DoctorsController` missing `[Authorize]` attribute
 - Client can access UI screens they shouldn't see (but API blocks unauthorized actions)
 
 ### Recommendations
-- Add `[Authorize]` to all controllers
 - Implement client-side JWT validation before UI routing
 - Audit all endpoints for proper authorization
 - Add API-level logging for unauthorized access attempts
@@ -138,6 +141,7 @@ cd androidCircus
 ### Patient
 - DateOfBirth, Address
 - EmergencyContactName, EmergencyContactPhone
+- DoctorNotes (shared notes for all doctors)
 
 ### Doctor
 - Specialization, LicenseNumber
