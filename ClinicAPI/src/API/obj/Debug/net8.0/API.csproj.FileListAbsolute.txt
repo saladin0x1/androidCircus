@@ -136,3 +136,4 @@
 /Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/src/API/obj/Debug/net8.0/API.pdb
 /Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/src/API/obj/Debug/net8.0/API.genruntimeconfig.cache
 /Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/src/API/obj/Debug/net8.0/ref/API.dll
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/src/API/bin/Debug/net8.0/Bogus.dll

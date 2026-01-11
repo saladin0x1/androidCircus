@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "D0saeouX8tQEXOCG/fVWQV8AYZ8AeZmU9596Qdk4Uvy48nU2EbQTjIXxRpqTQEJkDlPLnOWu0+iZS8+DwpMGZA==",
+  "dgSpecHash": "c1c70vkHXGJmE078weIHet4ogiTyK+qKb5DY31jRpxXC1zOPgQkxw3tcfa6dsA2TtiwETF78eGRQamM6BG+L5Q==",
   "success": true,
   "projectFilePath": "/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/src/API/API.csproj",
   "expectedPackageFiles": [
     "/Users/user/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
+    "/Users/user/.nuget/packages/bogus/35.6.5/bogus.35.6.5.nupkg.sha512",
     "/Users/user/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/user/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.0/microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
     "/Users/user/.nuget/packages/microsoft.aspnetcore.openapi/8.0.19/microsoft.aspnetcore.openapi.8.0.19.nupkg.sha512",

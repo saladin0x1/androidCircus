@@ -11,7 +11,7 @@ public class RetrofitClient {
     // UNIVERSAL CONFIGURATION:
     // Use your machine's LAN IP address here.
     // Works for: Emulator, Real Device (WiFi), and prepares for VPS IP.
-    private static final String BASE_URL = "http://26.10.1.235:8080/api/";
+    private static final String BASE_URL = "http://192.168.1.168:8080/api/";
 
     private static Retrofit retrofit = null;
 

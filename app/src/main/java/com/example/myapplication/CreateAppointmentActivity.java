@@ -22,6 +22,7 @@ import com.example.myapplication.utils.NotificationHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,7 +79,7 @@ public class CreateAppointmentActivity extends AppCompatActivity {
 
                 // Format for API (ISO 8601) - defaulting to 09:00 AM
                 // Note: Month is 0-indexed in Calendar
-                selectedDateIso = String.format("%04d-%02d-%02dT09:00:00", year1, monthOfYear + 1, dayOfMonth);
+                selectedDateIso = String.format(Locale.US, "%04d-%02d-%02dT09:00:00", year1, monthOfYear + 1, dayOfMonth);
             }, year, month, day);
         
         // Prevent past dates

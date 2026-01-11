@@ -20,6 +20,11 @@ public class Patient
 
     public string? EmergencyContactPhone { get; set; }
 
+    /// <summary>
+    /// Doctor's notes about this patient (can be updated by any doctor)
+    /// </summary>
+    public string? DoctorNotes { get; set; }
+
     public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
 
     // Navigation properties

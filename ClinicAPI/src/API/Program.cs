@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -102,7 +103,11 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
+// Configure middleware pipeline (order matters!)
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>(); // Must be first to catch all exceptions
+app.UseRequestLogging(); // Log all requests
+
+// Configure Swagger/OpenAPI (must come after exception handler)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -121,12 +126,16 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ClinicDbContext>();
         context.Database.EnsureCreated();
-        Console.WriteLine("Database created and seeded successfully");
+
+        // Seed data using factory pattern
+        DataSeeder.SeedDataAsync(context).GetAwaiter().GetResult();
+
+        Console.WriteLine("Database initialized successfully");
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while creating the database");
+        logger.LogError(ex, "An error occurred while initializing the database");
     }
 }
 

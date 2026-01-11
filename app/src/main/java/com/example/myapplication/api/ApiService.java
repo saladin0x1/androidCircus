@@ -55,4 +55,23 @@ public interface ApiService {
         @Header("Authorization") String token,
         @Path("id") String id
     );
+
+    @GET("patients/{id}")
+    Call<ApiResponse<PatientDTO>> getPatient(
+        @Header("Authorization") String token,
+        @Path("id") String id
+    );
+
+    @GET("patients/{id}/notes")
+    Call<ApiResponse<String>> getPatientNotes(
+        @Header("Authorization") String token,
+        @Path("id") String id
+    );
+
+    @PUT("patients/{id}/notes")
+    Call<ApiResponse<String>> updatePatientNotes(
+        @Header("Authorization") String token,
+        @Path("id") String id,
+        @Body UpdatePatientNotesRequest request
+    );
 }

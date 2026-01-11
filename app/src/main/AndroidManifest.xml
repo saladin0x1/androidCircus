@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -49,6 +50,21 @@
         <!-- Doctor Home -->
         <activity
             android:name=".DoctorHomeActivity"
+            android:exported="false" />
+
+        <!-- Doctor Agenda -->
+        <activity
+            android:name=".DoctorAgendaActivity"
+            android:exported="false" />
+
+        <!-- Doctor Patients -->
+        <activity
+            android:name=".DoctorPatientsActivity"
+            android:exported="false" />
+
+        <!-- Patient Dossier -->
+        <activity
+            android:name=".PatientDossierActivity"
             android:exported="false" />
 
         <!-- Clerk Home -->
