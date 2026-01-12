@@ -24,7 +24,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText emailInput;
     private TextView submitButton;
-    private TextView backToLoginButton;
+    private View backToLoginButton;
     private ProgressBar progressBar;
     private ApiService apiService;
 

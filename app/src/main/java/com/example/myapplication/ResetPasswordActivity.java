@@ -24,7 +24,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText emailInput, newPasswordInput, confirmPasswordInput;
     private TextView submitButton;
-    private TextView backToLoginButton;
+    private View backToLoginButton;
     private ProgressBar progressBar;
     private ApiService apiService;
 
