@@ -47,7 +47,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -73,7 +73,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("Invalid email or password", result.Error);
@@ -97,7 +97,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("Invalid email or password", result.Error);
@@ -123,7 +123,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("Account is inactive", result.Error);
@@ -151,7 +151,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -183,7 +183,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -212,7 +212,7 @@ public class AuthControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<LoginResponse>(response);
+        var result = await DeserializeResponse<LoginResponse>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("Email already registered", result.Error);

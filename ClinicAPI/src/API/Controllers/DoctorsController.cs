@@ -9,6 +9,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class DoctorsController : ControllerBase
 {
     private readonly ClinicDbContext _context;

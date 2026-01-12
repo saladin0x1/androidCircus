@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
+using System.Threading;
 using System.Text;
 using System.Text.Json;
 using API.Data;
@@ -9,13 +10,14 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.JsonWebTokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Tests.Helpers;
 
 public class TestFixture : WebApplicationFactory<Program>
 {
     public ClinicDbContext DbContext { get; private set; } = null!;
+    private static int _testRunId = 0;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -29,10 +31,12 @@ public class TestFixture : WebApplicationFactory<Program>
                 services.Remove(descriptor);
             }
 
-            // Add in-memory database
+            // Add in-memory database with unique name for each test run
+            var dbName = $"TestDb_{Interlocked.Increment(ref _testRunId)}";
             services.AddDbContext<ClinicDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDb");
+                options.UseInMemoryDatabase(dbName);
+                options.EnableSensitiveDataLogging();
             });
 
             // Create the service provider
@@ -46,12 +50,22 @@ public class TestFixture : WebApplicationFactory<Program>
 
     public async Task ResetDatabaseAsync()
     {
-        // Remove all data
-        DbContext.Appointments.RemoveRange(DbContext.Appointments);
-        DbContext.Patients.RemoveRange(DbContext.Patients);
-        DbContext.Doctors.RemoveRange(DbContext.Doctors);
-        DbContext.Clerks.RemoveRange(DbContext.Clerks);
-        DbContext.Users.RemoveRange(DbContext.Users);
+        // Clear all entities individually to avoid cascade issues
+        var appointments = await DbContext.Appointments.ToListAsync();
+        DbContext.Appointments.RemoveRange(appointments);
+
+        var patients = await DbContext.Patients.ToListAsync();
+        DbContext.Patients.RemoveRange(patients);
+
+        var doctors = await DbContext.Doctors.ToListAsync();
+        DbContext.Doctors.RemoveRange(doctors);
+
+        var clerks = await DbContext.Clerks.ToListAsync();
+        DbContext.Clerks.RemoveRange(clerks);
+
+        var users = await DbContext.Users.ToListAsync();
+        DbContext.Users.RemoveRange(users);
+
         await DbContext.SaveChangesAsync();
     }
 
@@ -81,6 +95,10 @@ public class TestFixture : WebApplicationFactory<Program>
                     DateOfBirth = DateTime.UtcNow.AddYears(-30)
                 };
                 DbContext.Patients.Add(patient);
+                await DbContext.SaveChangesAsync();
+
+                // Reload to get navigation property
+                await DbContext.Entry(user).Reference(u => u.Patient).LoadAsync();
                 break;
 
             case UserRole.Doctor:
@@ -90,6 +108,10 @@ public class TestFixture : WebApplicationFactory<Program>
                     Specialization = "General Practitioner"
                 };
                 DbContext.Doctors.Add(doctor);
+                await DbContext.SaveChangesAsync();
+
+                // Reload to get navigation property
+                await DbContext.Entry(user).Reference(u => u.Doctor).LoadAsync();
                 break;
 
             case UserRole.Clerk:
@@ -98,10 +120,13 @@ public class TestFixture : WebApplicationFactory<Program>
                     UserId = user.Id
                 };
                 DbContext.Clerks.Add(clerk);
+                await DbContext.SaveChangesAsync();
+
+                // Reload to get navigation property
+                await DbContext.Entry(user).Reference(u => u.Clerk).LoadAsync();
                 break;
         }
 
-        await DbContext.SaveChangesAsync();
         return user;
     }
 
@@ -128,7 +153,7 @@ public class TestFixture : WebApplicationFactory<Program>
             signingCredentials: creds
         );
 
-        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var tokenHandler = new JwtSecurityTokenHandler();
         return tokenHandler.WriteToken(token);
     }
 }

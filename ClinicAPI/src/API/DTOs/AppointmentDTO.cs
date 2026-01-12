@@ -28,7 +28,23 @@ public class CreateAppointmentRequest
     public string? Notes { get; set; }
 }
 
+public class RescheduleAppointmentRequest
+{
+    public DateTime AppointmentDate { get; set; }
+}
+
+public class UpdateAppointmentStatusRequest
+{
+    public string Status { get; set; } = string.Empty;
+}
+
 public class CompleteAppointmentRequest
 {
     public string? DoctorNotes { get; set; }
+}
+
+public class TimeSlotDTO
+{
+    public string Time { get; set; } = string.Empty;  // Format: "HH:mm"
+    public bool Available { get; set; }
 }

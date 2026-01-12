@@ -15,6 +15,14 @@ public class PatientDTO
     public DateTime RegistrationDate { get; set; }
 }
 
+public class UpdatePatientRequest
+{
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Phone { get; set; }
+    public DateTime? DateOfBirth { get; set; }
+}
+
 public class UpdatePatientNotesRequest
 {
     public string Notes { get; set; } = string.Empty;

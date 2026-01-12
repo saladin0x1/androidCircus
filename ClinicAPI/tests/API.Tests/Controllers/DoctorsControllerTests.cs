@@ -31,11 +31,14 @@ public class DoctorsControllerTests : IClassFixture<TestFixture>
     {
         // Arrange
         await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("user@example.com", UserRole.Patient);
+
+        // Create 3 doctors
         await _fixture.CreateTestUserAsync("doctor1@example.com", UserRole.Doctor);
         await _fixture.CreateTestUserAsync("doctor2@example.com", UserRole.Doctor);
-        await _fixture.CreateTestUserAsync("patient@example.com", UserRole.Patient);
+        await _fixture.CreateTestUserAsync("doctor3@example.com", UserRole.Doctor);
 
-        var patient = await _fixture.CreateTestUserAsync("user@example.com", UserRole.Patient);
+        var patient = await _fixture.DbContext.Users.FirstAsync(u => u.Email == "user@example.com");
         var token = _fixture.GenerateTestToken(patient);
         SetAuthHeader(token);
 

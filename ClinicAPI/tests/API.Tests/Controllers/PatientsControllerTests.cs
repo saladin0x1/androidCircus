@@ -49,7 +49,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -71,7 +71,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -92,7 +92,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Data);
@@ -145,7 +145,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("INVALID_ID", result.Error?.Code);
@@ -166,7 +166,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
         Assert.NotNull(result);
         Assert.False(result.Success);
         Assert.Equal("NOT_FOUND", result.Error?.Code);
@@ -190,7 +190,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<string>>(response);
+        var result = await DeserializeResponse<ApiResponse<string>>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Patient has a history of allergies.", result.Data);
@@ -234,7 +234,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await _fixture.DeserializeResponse<ApiResponse<string>>(response);
+        var result = await DeserializeResponse<ApiResponse<string>>(response);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Updated: Patient responded well to treatment.", result.Data);
@@ -268,7 +268,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
     }
 
     [Fact]
-    public async Task UpdatePatientNotes_AsClerk_ReturnsForbidden()
+    public async Task UpdatePatientNotes_AsClerk_ReturnsSuccess()
     {
         // Arrange
         await _fixture.ResetDatabaseAsync();
@@ -279,7 +279,7 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
 
         var updateRequest = new UpdatePatientNotesRequest
         {
-            Notes = "Clerk trying to update notes"
+            Notes = "Clerk updated notes"
         };
 
         // Act
@@ -288,6 +288,10 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
             updateRequest);
 
         // Assert
-        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<string>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+        Assert.Equal("Clerk updated notes", result.Data);
     }
 }

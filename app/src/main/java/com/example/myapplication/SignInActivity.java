@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.api.SessionManager;
 import com.example.myapplication.api.models.LoginRequest;
 import com.example.myapplication.api.models.LoginResponse;
+import com.example.myapplication.utils.ErrorMessageHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +25,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText emailInput, passwordInput;
     private TextView signInButton;
     private TextView signUpLink;
+    private ProgressBar progressBar;
     private SessionManager sessionManager;
     private ApiService apiService;
 
@@ -38,6 +41,7 @@ public class SignInActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInput);
         signInButton = findViewById(R.id.signInButton);
         signUpLink = findViewById(R.id.signUpLink);
+        progressBar = findViewById(R.id.progressBar);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,13 +68,15 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void performLogin(String email, String password) {
-        Toast.makeText(SignInActivity.this, "Connexion en cours...", Toast.LENGTH_SHORT).show();
+        showLoading(true);
 
         LoginRequest request = new LoginRequest(email, password);
 
         apiService.login(request).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                showLoading(false);
+
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     if (loginResponse.isSuccess()) {
@@ -85,7 +91,7 @@ public class SignInActivity extends AppCompatActivity {
                         );
 
                         Toast.makeText(SignInActivity.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
-                        
+
                         Intent intent;
                         String role = data.getRole();
                         if ("Doctor".equalsIgnoreCase(role)) {
@@ -95,21 +101,33 @@ public class SignInActivity extends AppCompatActivity {
                         } else {
                             intent = new Intent(SignInActivity.this, HomeActivity.class);
                         }
-                        
+
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(SignInActivity.this, "Erreur: " + loginResponse.getError(), Toast.LENGTH_SHORT).show();
+                        String errorMsg = loginResponse.getError() != null ? loginResponse.getError() : "Erreur inconnue";
+                        Toast.makeText(SignInActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                     Toast.makeText(SignInActivity.this, "Échec de la connexion", Toast.LENGTH_SHORT).show();
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(SignInActivity.this, response.code(), "Échec de la connexion");
+                    Toast.makeText(SignInActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(SignInActivity.this, "Erreur réseau: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                showLoading(false);
+                String errorMsg = "Vérifiez votre connexion internet";
+                Toast.makeText(SignInActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showLoading(boolean show) {
+        if (progressBar != null) {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        signInButton.setEnabled(!show);
+        signUpLink.setEnabled(!show);
     }
 }
