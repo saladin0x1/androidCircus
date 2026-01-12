@@ -1,0 +1,8 @@
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/bin/Debug/net8.0/CoverletSourceRootsMapping_API.Tests
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.csproj.AssemblyReference.cache
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/MvcTestingAppManifest.json
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.AssemblyInfoInputs.cache
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.AssemblyInfo.cs
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.csproj.CoreCompileInputs.cache
+/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/obj/Debug/net8.0/API.Tests.sourcelink.json

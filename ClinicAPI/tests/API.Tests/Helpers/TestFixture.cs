@@ -1,15 +1,15 @@
+using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using API.Data;
 using API.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace API.Tests.Helpers;
 
@@ -111,47 +111,24 @@ public class TestFixture : WebApplicationFactory<Program>
             "YourSuperSecretKeyForJWTMustBeAtLeast32CharactersLong!"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new List<System.Security.Claims.Claim>
+        var claims = new List<Claim>
         {
-            new(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(System.Security.Claims.ClaimTypes.Email, user.Email),
-            new(System.Security.Claims.ClaimTypes.Role, user.Role.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Role, user.Role.ToString()),
             new("RoleSpecificId", user.Id.ToString()),
-            new(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id.ToString())
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var token = new JsonWebToken(claims)
-        {
-            Issuer = "ClinicAPI",
-            Audience = "ClinicApp",
-            Expires = DateTime.UtcNow.AddHours(24),
-            SigningCredentials = creds
-        };
-
-        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-        return tokenHandler.WriteToken(new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
+        var token = new JwtSecurityToken(
             issuer: "ClinicAPI",
             audience: "ClinicApp",
             claims: claims,
             expires: DateTime.UtcNow.AddHours(24),
             signingCredentials: creds
-        ));
-    }
+        );
 
-    public static StringContent GetJsonContent<T>(T data)
-    {
-        return new StringContent(
-            JsonSerializer.Serialize(data),
-            Encoding.UTF8,
-            "application/json");
-    }
-
-    public static async Task<T?> DeserializeResponse<T>(HttpResponseMessage response)
-    {
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
+        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        return tokenHandler.WriteToken(token);
     }
 }

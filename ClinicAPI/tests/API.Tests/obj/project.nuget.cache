@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BYgMQiBw7YrXxrevPQ0ZjFTLP5V29BZ/0NcGdRdj6FoMkJF/kFjDwN2tzOmaz0YxkD1chMs6X7+gbiuust5JBg==",
+  "dgSpecHash": "4Hh3zgjROHVqWb/i3acrf9DcbZNWpuXxn8pvBldPuBNy6cZVgc0khwQD+OUWjyd5skFUDHNlSga64k5KeZWQlw==",
   "success": true,
   "projectFilePath": "/Users/user/AndroidStudioProjects/androidCircus/ClinicAPI/tests/API.Tests/API.Tests.csproj",
   "expectedPackageFiles": [
@@ -115,6 +115,7 @@
     "/Users/user/.nuget/packages/system.linq.expressions/4.3.0/system.linq.expressions.4.3.0.nupkg.sha512",
     "/Users/user/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512",
     "/Users/user/.nuget/packages/system.net.http/4.3.0/system.net.http.4.3.0.nupkg.sha512",
+    "/Users/user/.nuget/packages/system.net.http.json/8.0.0/system.net.http.json.8.0.0.nupkg.sha512",
     "/Users/user/.nuget/packages/system.net.primitives/4.3.0/system.net.primitives.4.3.0.nupkg.sha512",
     "/Users/user/.nuget/packages/system.net.sockets/4.3.0/system.net.sockets.4.3.0.nupkg.sha512",
     "/Users/user/.nuget/packages/system.objectmodel/4.3.0/system.objectmodel.4.3.0.nupkg.sha512",
