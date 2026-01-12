@@ -1,0 +1,25 @@
+services:
+  # .NET Web API
+  clinic-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clinic_api
+    ports:
+      - "0.0.0.0:8080:80"  # Explicitly bind to all interfaces on host port 8080
+      - "0.0.0.0:5201:80"  # Explicitly bind to all interfaces on host port 5201
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/clinic.db
+      - Jwt__Secret=YourSuperSecretKeyForJWTMustBeAtLeast32CharactersLong!
+      - Jwt__Issuer=ClinicAPI
+      - Jwt__Audience=ClinicApp
+      - Jwt__ExpirationHours=24
+    volumes:
+      - clinic-data:/app/data
+    restart: always
+
+volumes:
+  clinic-data:
+    driver: local
