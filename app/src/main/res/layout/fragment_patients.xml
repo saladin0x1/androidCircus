@@ -63,14 +63,18 @@
         android:layout_marginBottom="8dp" />
 
     <!-- Patients List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/patientsRecyclerView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
 
-    <!-- Empty State -->
-    <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/patientsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+        <!-- Empty State -->
+        <LinearLayout
         android:id="@+id/emptyStateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -101,5 +105,15 @@
             android:layout_marginTop="4dp" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/primary" />
+
+    </FrameLayout>
 
 </LinearLayout>

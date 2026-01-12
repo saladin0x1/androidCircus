@@ -134,4 +134,12 @@
         app:tint="@color/text_on_primary"
         android:contentDescription="Nouveau rendez-vous" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/primary" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
