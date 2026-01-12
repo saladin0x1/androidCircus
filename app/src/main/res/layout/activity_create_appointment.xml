@@ -92,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:hint="Décrivez le motif de votre consultation..."
-        android:background="@drawable/spinner_background"
+        android:background="@drawable/edittext_background"
         android:gravity="top|start"
         android:padding="16dp"
         android:textSize="16sp"
