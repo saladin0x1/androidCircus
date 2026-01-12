@@ -11,8 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        
-                app:cardElevation="0dp">
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/anthropic_beige"
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,9 +40,10 @@
                 android:layout_marginStart="12dp"
                 android:background="@null"
                 android:hint="Rechercher un patient..."
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_hint"
+                android:fontFamily="@font/lora"
                 android:inputType="text"
                 android:imeOptions="actionSearch" />
 
@@ -56,7 +59,7 @@
         android:text="0 Patients"
         android:textSize="14sp"
         android:textColor="@color/text_secondary"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp" />
 
     <!-- Patients List -->

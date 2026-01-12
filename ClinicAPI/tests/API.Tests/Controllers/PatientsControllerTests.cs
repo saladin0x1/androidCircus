@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
 using API.DTOs;
 using API.Models;
 using API.Tests.Helpers;
@@ -15,6 +17,15 @@ public class PatientsControllerTests : IClassFixture<TestFixture>
     {
         _fixture = fixture;
         _client = fixture.CreateClient();
+    }
+
+    private static async Task<T?> DeserializeResponse<T>(HttpResponseMessage response)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
     }
 
     private void SetAuthHeader(string token)

@@ -71,8 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
-                android:textSize="12sp"
-                android:textColor="@color/text_hint"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
                 android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
@@ -81,17 +81,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:text="email@example.com"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textColor="@color/text_hint"
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:layout_marginBottom="16dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider"
+                android:background="@drawable/edittext_background"
                 android:layout_marginBottom="24dp" />
 
             <!-- Name -->
@@ -99,8 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nom complet"
-                android:textSize="12sp"
-                android:textColor="@color/text_hint"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
                 android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
@@ -112,25 +107,20 @@
                 android:inputType="textPersonName"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:color/transparent"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/edittext_background"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_hint"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider"
-                android:layout_marginBottom="24dp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/lora" />
 
             <!-- Phone -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Téléphone"
-                android:textSize="12sp"
-                android:textColor="@color/text_hint"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
                 android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
@@ -142,17 +132,12 @@
                 android:inputType="phone"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:color/transparent"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/edittext_background"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_hint"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider"
-                android:layout_marginBottom="32dp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/lora" />
 
             <!-- Update Button -->
             <TextView
@@ -160,9 +145,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:text="Mettre à jour"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:gravity="center"
-                android:background="@color/primary"
+                android:background="@drawable/primary_button_background"
                 android:textColor="@color/text_on_primary"
                 android:clickable="true"
                 android:focusable="true"
