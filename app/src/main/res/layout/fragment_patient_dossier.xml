@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,25 +16,28 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/anthropic_beige"
+                app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp"
-                android:background="#000000">
+                android:background="@color/primary">
 
                 <TextView
                     android:id="@+id/patientAvatarLarge"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="#FFFFFF"
+                    android:background="@color/surface"
                     android:text="JD"
                     android:textSize="24sp"
-                    android:textColor="#000000"
+                    android:textColor="@color/text_primary"
                     android:gravity="center"
-                    android:fontFamily="sans-serif-medium" />
+                    android:fontFamily="@font/poppins" />
 
                 <TextView
                     android:id="@+id/patientNameText"
@@ -42,8 +45,8 @@
                     android:layout_height="wrap_content"
                     android:text="Jean Dupont"
                     android:textSize="22sp"
-                    android:textColor="#FFFFFF"
-                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_on_primary"
+                    android:fontFamily="@font/poppins"
                     android:layout_marginTop="16dp" />
 
                 <TextView
@@ -52,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:text="jean.dupont@email.com"
                     android:textSize="14sp"
-                    android:textColor="#BDBDBD"
+                    android:textColor="@color/text_hint"
                     android:layout_marginTop="4dp" />
 
             </LinearLayout>
@@ -65,8 +68,8 @@
             android:layout_height="wrap_content"
             android:text="Informations Personnelles"
             android:textSize="14sp"
-            android:textColor="#9E9E9E"
-            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="@font/poppins"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="8dp" />
 
@@ -76,7 +79,10 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/anthropic_beige"
+                app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +101,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_calendar_month"
-                        app:tint="#757575" />
+                        app:tint="@color/icon_tint" />
 
                     <TextView
                         android:id="@+id/patientDobText"
@@ -104,7 +110,7 @@
                         android:layout_weight="1"
                         android:text="15 Juin 1990 (34 ans)"
                         android:textSize="14sp"
-                        android:textColor="#424242"
+                        android:textColor="@color/text_primary"
                         android:layout_marginStart="12dp" />
 
                 </LinearLayout>
@@ -112,7 +118,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#F0F0F0"
+                    android:background="@color/divider"
                     android:layout_marginVertical="8dp" />
 
                 <LinearLayout
@@ -125,7 +131,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_phone"
-                        app:tint="#757575" />
+                        app:tint="@color/icon_tint" />
 
                     <TextView
                         android:id="@+id/patientPhoneText"
@@ -134,7 +140,7 @@
                         android:layout_weight="1"
                         android:text="+33 6 12 34 56 78"
                         android:textSize="14sp"
-                        android:textColor="#424242"
+                        android:textColor="@color/text_primary"
                         android:layout_marginStart="12dp" />
 
                 </LinearLayout>
@@ -149,8 +155,8 @@
             android:layout_height="wrap_content"
             android:text="Historique des Rendez-vous"
             android:textSize="14sp"
-            android:textColor="#9E9E9E"
-            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="@font/poppins"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="8dp" />
 
@@ -174,7 +180,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/ic_info"
+                android:src="@drawable/ic_medical_advice"
                 android:alpha="0.3" />
 
             <TextView
@@ -182,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:text="Aucun dossier disponible"
                 android:textSize="16sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="16dp" />
 
             <TextView
@@ -190,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:text="Sélectionnez un patient pour voir son dossier"
                 android:textSize="13sp"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/text_hint"
                 android:layout_marginTop="4dp" />
 
         </LinearLayout>

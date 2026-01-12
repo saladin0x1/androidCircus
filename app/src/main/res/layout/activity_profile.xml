@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/surface"
     android:fillViewport="true">
 
     <LinearLayout
@@ -24,8 +24,8 @@
                 android:layout_weight="1"
                 android:text="Profil"
                 android:textSize="18sp"
-                android:textColor="#000000"
-                android:fontFamily="sans-serif-medium" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="@font/poppins" />
 
             <TextView
                 android:id="@+id/backButton"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Retour"
                 android:textSize="14sp"
-                android:textColor="#6B6B6B"
+                android:textColor="@color/text_secondary"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="8dp"
@@ -47,7 +47,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#F0F0F0" />
+            android:background="@color/divider" />
 
         <!-- Content -->
         <LinearLayout
@@ -72,8 +72,8 @@
                 android:layout_height="wrap_content"
                 android:text="Email"
                 android:textSize="12sp"
-                android:textColor="#9B9B9B"
-                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text_hint"
+                android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_height="48dp"
                 android:text="email@example.com"
                 android:textSize="15sp"
-                android:textColor="#B0B0B0"
+                android:textColor="@color/text_hint"
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
@@ -91,7 +91,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#E8E8E8"
+                android:background="@color/divider"
                 android:layout_marginBottom="24dp" />
 
             <!-- Name -->
@@ -100,8 +100,8 @@
                 android:layout_height="wrap_content"
                 android:text="Nom complet"
                 android:textSize="12sp"
-                android:textColor="#9B9B9B"
-                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text_hint"
+                android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
             <EditText
@@ -114,14 +114,14 @@
                 android:paddingEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/transparent"
-                android:textColor="#000000"
-                android:textColorHint="#B0B0B0"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#E8E8E8"
+                android:background="@color/divider"
                 android:layout_marginBottom="24dp" />
 
             <!-- Phone -->
@@ -130,8 +130,8 @@
                 android:layout_height="wrap_content"
                 android:text="Téléphone"
                 android:textSize="12sp"
-                android:textColor="#9B9B9B"
-                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text_hint"
+                android:fontFamily="@font/poppins"
                 android:layout_marginBottom="8dp" />
 
             <EditText
@@ -144,14 +144,14 @@
                 android:paddingEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/transparent"
-                android:textColor="#000000"
-                android:textColorHint="#B0B0B0"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#E8E8E8"
+                android:background="@color/divider"
                 android:layout_marginBottom="32dp" />
 
             <!-- Update Button -->
@@ -162,11 +162,11 @@
                 android:text="Mettre à jour"
                 android:textSize="15sp"
                 android:gravity="center"
-                android:background="#000000"
-                android:textColor="#FFFFFF"
+                android:background="@color/primary"
+                android:textColor="@color/text_on_primary"
                 android:clickable="true"
                 android:focusable="true"
-                android:fontFamily="sans-serif-medium" />
+                android:fontFamily="@font/poppins" />
 
         </LinearLayout>
     </LinearLayout>

@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Medical appointment management POC (Proof of Concept) with three distinct user roles:
 - **Patient**: Book, view, and cancel appointments
-- **Doctor**: View assigned appointments and complete them with notes
-- **Clerk**: Manage all appointments and register new patients
+- **Doctor**: View assigned appointments, manage patient dossiers (Info/History/Notes tabs), complete appointments
+- **Clerk**: Dashboard with statistics, manage all appointments
 
 **Tech Stack**: Native Android (Java) frontend + .NET 8 Web API backend + SQLite database
 
@@ -16,24 +16,31 @@ Medical appointment management POC (Proof of Concept) with three distinct user r
 ### Backend (.NET API in `ClinicAPI/`)
 - **Framework**: .NET 8 Web API with JWT authentication
 - **Database**: SQLite via Entity Framework Core
-- **Controllers**: `AuthController`, `AppointmentsController`, `DoctorsController`, `ClerkController`
+- **Controllers**: `AuthController`, `DoctorsController`, `PatientsController`, `ClerkController`
 - **Entry Point**: `ClinicAPI/src/API/Program.cs`
-- **Data Layer**: Uses EF Core with `ApplicationDbContext` in `Data/` folder
+- **Data Layer**: Uses EF Core with `ClinicDbContext` in `Data/` folder
 - **DTOs**: Request/response models in `DTOs/` folder for API contracts
+- **Factories**: `Data/Factories/` uses Bogus library to generate seed data
+- **Middleware**: Custom `GlobalExceptionHandlerMiddleware` and request logging
 
 ### Frontend (Android in `app/`)
-- **Language**: Java (native Android)
+- **Language**: Java (native Android) - NOT Kotlin
 - **Networking**: Retrofit 2 + OkHttp for REST API calls
 - **Session**: JWT token stored in SharedPreferences via `SessionManager.java`
 - **API Models**: POJOs in `app/src/main/java/com/example/myapplication/api/models/`
-- **Role-based Routing**: `HomeActivity.java` routes to `PatientHomeActivity`, `DoctorHomeActivity`, or `ClerkHomeActivity` based on user role
+- **Role-based Routing**: `HomeActivity.java` routes to role-specific Activity based on JWT role claim
+- **Doctor UI Architecture**: ViewPager2 with tabs (Patients, Agenda) using fragments
+  - `DoctorViewPagerAdapter` manages tab navigation
+  - `PatientsFragment` - Searchable patient list
+  - `AgendaFragment` - Calendar view of appointments
+  - `PatientDossierActivity` - ViewPager2 with Info/History/Notes tabs for a patient
 
 ### Authentication Flow
 1. Android app calls `POST /api/auth/login` with email/password
-2. Backend returns JWT token with user role claims
+2. Backend returns JWT token with user role claims (`ClaimTypes.Role`, `ClaimTypes.NameIdentifier`)
 3. Client stores token in `SessionManager` (SharedPreferences)
-4. All subsequent API calls include `Authorization: Bearer {token}` header
-5. Backend validates JWT and enforces role-based authorization
+4. All subsequent API calls include `Authorization: Bearer {token}` header via `@Header` annotations in `ApiService`
+5. Backend validates JWT and enforces role-based authorization via `[Authorize(Roles = "...")]`
 
 ## Common Commands
 
@@ -87,11 +94,16 @@ dotnet build
 
 **Critical**: The Android app's API base URL is in `app/src/main/java/com/example/myapplication/api/RetrofitClient.java:14`
 
-Current configuration points to VPS at `http://26.10.1.235:8080/api/`
-
-For local development, change to your machine's LAN IP:
+For local development, use your machine's LAN IP:
 ```java
 private static final String BASE_URL = "http://192.168.1.XXX:5000/api/";
+```
+
+For Docker/local network testing from Android device:
+```bash
+# Run API bound to all interfaces
+cd ClinicAPI/src/API
+dotnet run --urls="http://0.0.0.0:5000"
 ```
 
 Find your IP:
@@ -116,7 +128,7 @@ Base URL: `http://localhost:5000/api/` (or configured URL)
 - `POST /api/auth/login` - Login (returns JWT)
 - `POST /api/auth/register` - Register new user
 
-**Appointments**
+**Appointments** (Note: Endpoints documented but AppointmentsController may not be implemented yet)
 - `GET /api/appointments` - List appointments (filtered by user role)
 - `GET /api/appointments/{id}` - Get appointment details
 - `POST /api/appointments` - Create appointment
@@ -124,30 +136,49 @@ Base URL: `http://localhost:5000/api/` (or configured URL)
 - `DELETE /api/appointments/{id}` - Cancel appointment
 
 **Doctors**
-- `GET /api/doctors` - List all doctors
+- `GET /api/doctors` - List all doctors (returns Id, Name, Specialization)
+
+**Patients**
+- `GET /api/patients/{id}` - Get patient details (Doctor/Clerk can access any, Patient only own)
+- `GET /api/patients/{id}/notes` - Get doctor notes (Doctor/Clerk only)
+- `PUT /api/patients/{id}/notes` - Update doctor notes (Doctor only)
 
 **Clerk Dashboard**
-- `GET /api/clerk/dashboard` - Statistics (total appointments, patients, doctors)
+- `GET /api/clerk/dashboard` - Statistics (TodayAppointments, PendingAppointments, TotalPatients, TotalDoctors)
 
 ## Android App Structure
 
 ```
 app/src/main/java/com/example/myapplication/
 ├── api/
-│   ├── RetrofitClient.java       # Singleton Retrofit instance
-│   ├── ApiService.java           # Retrofit interface
-│   ├── SessionManager.java       # JWT token storage
+│   ├── RetrofitClient.java       # Singleton Retrofit instance, configure BASE_URL here
+│   ├── ApiService.java           # Retrofit interface with @Endpoints
+│   ├── SessionManager.java       # JWT token storage in SharedPreferences
 │   └── models/                   # POJOs for API requests/responses
+├── fragments/
+│   ├── AgendaFragment.java       # Doctor's calendar view
+│   ├── PatientsFragment.java     # Doctor's patient list with search
+│   ├── PatientDossierFragment.java    # Patient info tab
+│   ├── PatientHistoryFragment.java    # Patient appointment history tab
+│   └── PatientNotesFragment.java      # Doctor notes tab (editable)
+├── utils/
+│   └── NotificationHelper.java   # Native notification handling
+├── SplashActivity.java           # Launch screen, checks auth state
 ├── SignInActivity.java           # Login screen
 ├── SignUpActivity.java           # Registration screen
-├── SplashActivity.java           # Launch screen
-├── HomeActivity.java             # Role-based router
+├── HomeActivity.java             # Role-based router to PatientHome/DoctorHome/ClerkHome
 ├── PatientHomeActivity.java      # Patient dashboard
-├── DoctorHomeActivity.java       # Doctor dashboard
-├── ClerkHomeActivity.java        # Clerk dashboard
+├── DoctorHomeActivity.java       # Doctor dashboard with ViewPager2 (Patients/Agenda tabs)
+├── DoctorPatientsActivity.java   # Patient list with search
+├── DoctorAgendaActivity.java     # Doctor's appointment calendar
+├── PatientDossierActivity.java   # Patient details with ViewPager2 (Info/History/Notes tabs)
+├── ClerkHomeActivity.java        # Clerk dashboard with statistics
 ├── CreateAppointmentActivity.java
 ├── ProfileActivity.java
-└── AppointmentsAdapter.java      # RecyclerView adapter
+├── AppointmentsAdapter.java      # RecyclerView adapter for appointments
+├── PatientsAdapter.java          # RecyclerView adapter for patient list
+├── DoctorViewPagerAdapter.java   # ViewPager adapter for Doctor home tabs
+└── PatientDossierPagerAdapter.java  # ViewPager adapter for Patient dossier tabs
 ```
 
 ## Development Notes
@@ -170,9 +201,10 @@ Android requires HTTP cleartext traffic for local development:
 - Docker volumes persist database in container at `/app/data/clinic.db`
 
 ### Known Issues
-- `DoctorsController` missing `[Authorize]` attribute (security issue)
-- Client-side role switching possible on rooted devices (UI only - backend protected)
+- `DoctorsController` missing `[Authorize]` attribute (publicly accessible - security issue)
+- Client-side role switching possible on rooted devices (UI only - backend is protected)
 - No refresh token mechanism (tokens expire after 24h)
+- Appointments endpoints documented in API but AppointmentsController not yet implemented in backend
 
 ## Testing
 
@@ -190,9 +222,10 @@ Android requires HTTP cleartext traffic for local development:
 
 ## Documentation
 
-See `docs/` folder for detailed documentation:
-- `API_ARCHITECTURE.md` - Backend architecture and layers
-- `API_ENDPOINTS.md` - Complete API endpoint reference
-- `ANDROID_API_INTEGRATION.md` - Android integration guide
-- `DATABASE_SCHEMA.md` - Database schema and models
-- `VPS_DEPLOYMENT.md` - Production deployment instructions
+Additional project documentation exists in various locations:
+- `README.md` - French language overview of features and implementation status
+- `UX_FLOWS.md` - User flow documentation
+- `UI_DISCOVERY.md` - UI component discovery notes
+- `ICON_PLAN.md` - Icon planning for health-themed rebrand
+- `ClinicAPI/README.md` - Backend-specific documentation
+- `ClinicAPI/TESTING_GUIDE.md` - Backend testing guide

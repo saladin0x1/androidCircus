@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="@color/background">
 
     <!-- Search Bar -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:elevation="2dp">
+        
+                app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_search"
-                app:tint="#9E9E9E" />
+                app:tint="@color/icon_tint" />
 
             <EditText
                 android:id="@+id/searchEditText"
@@ -38,8 +39,8 @@
                 android:background="@null"
                 android:hint="Rechercher un patient..."
                 android:textSize="15sp"
-                android:textColor="#000000"
-                android:textColorHint="#9E9E9E"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:inputType="text"
                 android:imeOptions="actionSearch" />
 
@@ -54,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="0 Patients"
         android:textSize="14sp"
-        android:textColor="#757575"
+        android:textColor="@color/text_secondary"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="8dp" />
 
@@ -85,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="Aucun patient"
             android:textSize="16sp"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="16dp" />
 
         <TextView
@@ -93,7 +94,7 @@
             android:layout_height="wrap_content"
             android:text="Vous n'avez pas encore de patients"
             android:textSize="13sp"
-            android:textColor="#BDBDBD"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>

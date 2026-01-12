@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA"
+    android:background="@color/background"
     android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Aucun rendez-vous"
             android:textSize="16sp"
-            android:textColor="#9E9E9E" />
+            android:textColor="@color/text_secondary" />
 
     </LinearLayout>
 

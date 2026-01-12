@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="@color/background">
 
     <!-- Calendar View -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:elevation="4dp">
+        app:cardElevation="0dp">
 
         <android.widget.CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF" />
+            android:background="@color/surface" />
 
     </androidx.cardview.widget.CardView>
 
@@ -37,8 +38,8 @@
             android:layout_weight="1"
             android:text="Rendez-vous"
             android:textSize="16sp"
-            android:textColor="#000000"
-            android:fontFamily="sans-serif-medium" />
+            android:textColor="@color/text_primary"
+            android:fontFamily="@font/poppins" />
 
         <TextView
             android:id="@+id/selectedDateText"
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:text="Aujourd'hui"
             android:textSize="13sp"
-            android:textColor="#757575" />
+            android:textColor="@color/text_secondary" />
 
     </LinearLayout>
 
@@ -78,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="Aucun rendez-vous"
             android:textSize="16sp"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="16dp" />
 
         <TextView
@@ -86,7 +87,7 @@
             android:layout_height="wrap_content"
             android:text="Vous n'avez pas de rendez-vous ce jour-là"
             android:textSize="13sp"
-            android:textColor="#BDBDBD"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>

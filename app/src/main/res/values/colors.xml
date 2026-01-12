@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Anthropic Brand Colors -->
+    <color name="anthropic_cream">#D9C9B5</color>
+    <color name="anthropic_beige">#A89885</color>
+    <color name="anthropic_brown">#6B5846</color>
+    <color name="anthropic_charcoal">#2A2A2A</color>
+    <color name="anthropic_sage">#8B9A7D</color>
+    <color name="anthropic_terracotta">#C17F59</color>
+    <color name="anthropic_muted_coral">#D4A59A</color>
+    <color name="anthropic_soft_white">#FAF7F2</color>
+    <color name="anthropic_warm_gray">#E8E4DD</color>
+    <color name="anthropic_medium_gray">#9B9590</color>
+
+    <!-- Semantic Colors -->
+    <color name="primary">@color/anthropic_charcoal</color>
+    <color name="primary_dark">#1A1A1A</color>
+    <color name="accent">@color/anthropic_terracotta</color>
+    <color name="accent_light">@color/anthropic_muted_coral</color>
+    <color name="background">@color/anthropic_soft_white</color>
+    <color name="surface">@color/white</color>
+    <color name="background_secondary">@color/anthropic_warm_gray</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">@color/anthropic_charcoal</color>
+    <color name="text_secondary">@color/anthropic_medium_gray</color>
+    <color name="text_hint">@color/anthropic_beige</color>
+    <color name="text_on_primary">@color/white</color>
+    <color name="text_on_accent">@color/white</color>
+
+    <!-- Status Colors -->
+    <color name="success">@color/anthropic_sage</color>
+    <color name="success_light">#B8C9A8</color>
+    <color name="warning">@color/anthropic_terracotta</color>
+    <color name="error">#C1440E</color>
+    <color name="info">@color/anthropic_brown</color>
+
+    <!-- UI Element Colors -->
+    <color name="divider">@color/anthropic_warm_gray</color>
+    <color name="border">@color/anthropic_warm_gray</color>
+    <color name="card_background">@color/white</color>
+    <color name="input_background">@color/white</color>
+    <color name="icon_tint">@color/anthropic_brown</color>
+
+    <!-- Legacy Colors (for reference) -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border/background -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <solid android:color="@color/surface" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/border" />
+        </shape>
+    </item>
+    <!-- Dropdown indicator -->
+    <item
+        android:gravity="end|center_vertical"
+        android:width="24dp"
+        android:height="24dp"
+        android:end="8dp">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <path
+                android:fillColor="@color/icon_tint"
+                android:pathData="M7,10L12,15L17,10H7Z" />
+        </vector>
+    </item>
+</layer-list>

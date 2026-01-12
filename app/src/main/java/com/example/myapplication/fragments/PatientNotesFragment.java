@@ -107,7 +107,7 @@ public class PatientNotesFragment extends Fragment {
                     if (apiResponse.isSuccess()) {
                         Toast.makeText(requireContext(), "Notes enregistrées", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(requireContext(), "Erreur: " + apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Erreur: " + apiResponse.getError().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(requireContext(), "Erreur lors de l'enregistrement", Toast.LENGTH_SHORT).show();

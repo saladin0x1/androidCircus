@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text Appearances - Headings (Poppins) -->
+    <style name="TextAppearance.Heading1" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.Heading2" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.Heading3" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.Heading4" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <!-- Text Appearances - Body (Lora) -->
+    <style name="TextAppearance.Body1" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lora</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">@font/lora</item>
+    </style>
+
+    <style name="TextAppearance.Body2" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lora</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="fontFamily">@font/lora</item>
+    </style>
+
+    <style name="TextAppearance.Body3" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lora</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="fontFamily">@font/lora</item>
+    </style>
+
+    <!-- Text Appearances - Caption/Label (Poppins) -->
+    <style name="TextAppearance.Caption" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_hint</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.Button" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <!-- Widget Styles -->
+    <style name="Widget.Button.Primary" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="Widget.Button.Secondary" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="Widget.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        <item name="android:fontFamily">@font/lora</item>
+        <item name="fontFamily">@font/lora</item>
+    </style>
+</resources>

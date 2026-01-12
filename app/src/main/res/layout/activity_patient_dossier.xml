@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="@color/background">
 
     <!-- Header -->
     <LinearLayout
@@ -13,16 +13,16 @@
         android:orientation="horizontal"
         android:padding="20dp"
         android:gravity="center_vertical"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
+        android:background="@color/surface"
+        >
 
         <TextView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="←"
-            android:textSize="24sp"
-            android:textColor="#000000"
+            android:text="Retour"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
             android:paddingEnd="16dp"
             android:clickable="true"
             android:focusable="true"
@@ -35,8 +35,8 @@
             android:layout_weight="1"
             android:text="Dossier Patient"
             android:textSize="20sp"
-            android:textColor="#000000"
-            android:fontFamily="sans-serif-medium" />
+            android:textColor="@color/text_primary"
+            android:fontFamily="@font/poppins" />
 
     </LinearLayout>
 
@@ -45,13 +45,13 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:elevation="2dp"
+        android:background="@color/surface"
+        
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabIndicatorColor="#000000"
-        app:tabSelectedTextColor="#000000"
-        app:tabTextColor="#757575"
+        app:tabIndicatorColor="@color/primary"
+        app:tabSelectedTextColor="@color/text_primary"
+        app:tabTextColor="@color/text_secondary"
         app:tabTextAppearance="@style/TabTextAppearance" />
 
     <!-- ViewPager for Fragments -->
