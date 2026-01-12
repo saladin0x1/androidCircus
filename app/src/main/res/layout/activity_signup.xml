@@ -9,15 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp"
+        android:padding="24dp"
         android:gravity="center">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:src="@drawable/ambulatory_clinic"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
             android:alpha="0.95"
             android:contentDescription="Medical Icon" />
 
@@ -25,99 +25,119 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Créer un compte"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textColor="@color/text_primary"
             android:fontFamily="@font/poppins"
-            android:layout_marginBottom="40dp" />
+            android:layout_marginBottom="32dp" />
+
+        <!-- Name Field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nom complet"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins"
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/nameInput"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Nom complet"
+            android:layout_height="52dp"
+            android:hint="Entrez votre nom complet"
             android:inputType="textPersonName"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/spinner_background"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
-            android:textSize="15sp" />
+            android:textSize="16sp"
+            android:fontFamily="@font/lora" />
 
-        <View
+        <!-- Email Field -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider"
-            android:layout_marginBottom="16dp" />
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins"
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Email"
+            android:layout_height="52dp"
+            android:hint="Entrez votre email"
             android:inputType="textEmailAddress"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/spinner_background"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
-            android:textSize="15sp" />
+            android:textSize="16sp"
+            android:fontFamily="@font/lora" />
 
-        <View
+        <!-- Password Field -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider"
-            android:layout_marginBottom="16dp" />
+            android:layout_height="wrap_content"
+            android:text="Mot de passe"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins"
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/passwordInput"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Mot de passe (min. 6 caractères)"
+            android:layout_height="52dp"
+            android:hint="Min. 6 caractères"
             android:inputType="textPassword"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/spinner_background"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
-            android:textSize="15sp" />
+            android:textSize="16sp"
+            android:fontFamily="@font/lora" />
 
-        <View
+        <!-- Phone Field -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider"
-            android:layout_marginBottom="16dp" />
+            android:layout_height="wrap_content"
+            android:text="Téléphone"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins"
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/phoneInput"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Téléphone (optionnel)"
+            android:layout_height="52dp"
+            android:hint="Optionnel"
             android:inputType="phone"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@android:color/transparent"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/spinner_background"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
-            android:textSize="15sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider"
-            android:layout_marginBottom="32dp" />
+            android:textSize="16sp"
+            android:fontFamily="@font/lora" />
 
         <TextView
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:text="S'inscrire"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:gravity="center"
-            android:background="@color/primary"
+            android:background="@drawable/primary_button_background"
             android:textColor="@color/text_on_primary"
             android:clickable="true"
             android:focusable="true"
@@ -130,8 +150,9 @@
             android:text="Déjà un compte ? Se connecter"
             android:textColor="@color/text_secondary"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="16dp"
             android:textSize="14sp"
+            android:fontFamily="@font/lora"
             android:clickable="true"
             android:focusable="true" />
 
