@@ -61,10 +61,9 @@ public class PatientNotesFragment extends Fragment {
     }
 
     private void loadNotes() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null || patientId == null) return;
+        if (patientId == null) return;
 
-        apiService.getPatientNotes(token, patientId).enqueue(new Callback<ApiResponse<String>>() {
+        apiService.getPatientNotes(patientId).enqueue(new Callback<ApiResponse<String>>() {
             @Override
             public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -83,19 +82,13 @@ public class PatientNotesFragment extends Fragment {
     }
 
     private void saveNotes() {
-        if (isLoading) return;
-
-        String token = sessionManager.getAuthHeader();
-        if (token == null || patientId == null) {
-            Toast.makeText(requireContext(), "Erreur d'authentification", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (isLoading || patientId == null) return;
 
         String notes = notesEditText.getText().toString();
         isLoading = true;
         saveButton.setEnabled(false);
 
-        apiService.updatePatientNotes(token, patientId, new UpdatePatientNotesRequest(notes))
+        apiService.updatePatientNotes(patientId, new UpdatePatientNotesRequest(notes))
             .enqueue(new Callback<ApiResponse<String>>() {
             @Override
             public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {

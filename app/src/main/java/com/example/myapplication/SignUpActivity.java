@@ -13,6 +13,7 @@ import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.api.SessionManager;
 import com.example.myapplication.api.models.LoginResponse;
 import com.example.myapplication.api.models.RegisterRequest;
+import com.example.myapplication.utils.ErrorMessageHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,13 +117,14 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.makeText(SignUpActivity.this, "Erreur: " + loginResponse.getError(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Erreur lors de l'inscription", Toast.LENGTH_SHORT).show();
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(SignUpActivity.this, response.code(), "Erreur lors de l'inscription");
+                    Toast.makeText(SignUpActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, "Erreur réseau: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Vérifiez votre connexion internet", Toast.LENGTH_SHORT).show();
             }
         });
     }

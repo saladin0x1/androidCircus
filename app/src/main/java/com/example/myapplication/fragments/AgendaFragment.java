@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.api.SessionManager;
 import com.example.myapplication.api.models.ApiResponse;
 import com.example.myapplication.api.models.AppointmentDTO;
+import com.example.myapplication.api.models.CompleteAppointmentRequest;
+import com.example.myapplication.utils.ErrorMessageHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -87,10 +90,7 @@ public class AgendaFragment extends Fragment {
     }
 
     private void loadAppointments() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -134,9 +134,40 @@ public class AgendaFragment extends Fragment {
     private void onAppointmentClick(AppointmentDTO appointment) {
         // Handle appointment click - show details/options
         if ("Scheduled".equalsIgnoreCase(appointment.getStatus())) {
-            // Show complete dialog
+            showCompleteConfirmation(appointment);
+        } else {
             Toast.makeText(requireContext(), "Rendez-vous: " + appointment.getReason(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showCompleteConfirmation(AppointmentDTO appointment) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Compléter le rendez-vous")
+                .setMessage("Voulez-vous vraiment marquer ce rendez-vous comme terminé ?")
+                .setPositiveButton("Oui", (dialog, which) -> completeAppointment(appointment))
+                .setNegativeButton("Non", null)
+                .show();
+    }
+
+    private void completeAppointment(AppointmentDTO appointment) {
+        CompleteAppointmentRequest request = new CompleteAppointmentRequest("");
+        apiService.completeAppointment(appointment.getId(), request).enqueue(new Callback<ApiResponse<AppointmentDTO>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<AppointmentDTO>> call, Response<ApiResponse<AppointmentDTO>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(requireContext(), "Rendez-vous terminé", Toast.LENGTH_SHORT).show();
+                    loadAppointments();
+                } else {
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(requireContext(), response.code(), "Erreur lors de la mise à jour");
+                    Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<AppointmentDTO>> call, Throwable t) {
+                Toast.makeText(requireContext(), "Erreur réseau", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

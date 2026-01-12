@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,12 +68,7 @@ public class DoctorHomeActivity extends AppCompatActivity {
         patientsCard.setOnClickListener(v -> openPatients());
 
         // Logout
-        logoutButton.setOnClickListener(v -> {
-            sessionManager.logout();
-            Intent intent = new Intent(DoctorHomeActivity.this, SignInActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        logoutButton.setOnClickListener(v -> showLogoutConfirmation());
 
         // Load data
         loadDashboardData();
@@ -91,10 +87,7 @@ public class DoctorHomeActivity extends AppCompatActivity {
     }
 
     private void loadDashboardData() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -154,5 +147,19 @@ public class DoctorHomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadDashboardData();
+    }
+
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Déconnexion")
+                .setMessage("Voulez-vous vraiment vous déconnecter ?")
+                .setPositiveButton("Oui", (dialog, which) -> {
+                    sessionManager.logout();
+                    Intent intent = new Intent(DoctorHomeActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Non", null)
+                .show();
     }
 }

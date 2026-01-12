@@ -86,10 +86,7 @@ public class PatientsFragment extends Fragment {
     }
 
     private void loadPatients() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {

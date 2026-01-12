@@ -76,6 +76,21 @@
         <activity
             android:name=".CreateAppointmentActivity"
             android:exported="false" />
+
+        <!-- Forgot Password -->
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+
+        <!-- Reset Password -->
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+
+        <!-- Clerk Approvals -->
+        <activity
+            android:name=".ClerkApprovalsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -48,7 +48,12 @@ public class SessionManager {
     public String getUserName() {
         return prefs.getString(KEY_NAME, "");
     }
-    
+
+    public void updateUserName(String name) {
+        editor.putString(KEY_NAME, name);
+        editor.apply();
+    }
+
     public String getUserEmail() {
         return prefs.getString(KEY_EMAIL, "");
     }
@@ -59,6 +64,11 @@ public class SessionManager {
 
     public String getRoleSpecificId() {
         return prefs.getString(KEY_ROLE_SPECIFIC_ID, "");
+    }
+
+    public void updateToken(String newToken) {
+        editor.putString(KEY_TOKEN, newToken);
+        editor.apply();
     }
 
     public void logout() {

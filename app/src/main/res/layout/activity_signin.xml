@@ -73,12 +73,25 @@
             android:inputType="textPassword"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/edittext_background"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
             android:textSize="16sp"
             android:fontFamily="@font/lora" />
+
+        <TextView
+            android:id="@+id/forgotPasswordLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mot de passe oublié ?"
+            android:textColor="@color/accent"
+            android:layout_gravity="end"
+            android:layout_marginBottom="24dp"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins"
+            android:clickable="true"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/signInButton"

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.api.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
@@ -15,11 +16,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // Initialize RetrofitClient with context for AuthInterceptor
+        RetrofitClient.init(this);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 SessionManager sessionManager = new SessionManager(SplashActivity.this);
-                
+
                 Intent intent;
                 if (sessionManager.isLoggedIn()) {
                     String role = sessionManager.getUserRole();

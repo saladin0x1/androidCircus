@@ -25,6 +25,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText emailInput, passwordInput;
     private TextView signInButton;
     private TextView signUpLink;
+    private TextView forgotPasswordLink;
     private ProgressBar progressBar;
     private SessionManager sessionManager;
     private ApiService apiService;
@@ -41,6 +42,7 @@ public class SignInActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInput);
         signInButton = findViewById(R.id.signInButton);
         signUpLink = findViewById(R.id.signUpLink);
+        forgotPasswordLink = findViewById(R.id.forgotPasswordLink);
         progressBar = findViewById(R.id.progressBar);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +64,16 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailInput.getText().toString().trim();
+                Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
             }
         });
@@ -129,5 +141,9 @@ public class SignInActivity extends AppCompatActivity {
         }
         signInButton.setEnabled(!show);
         signUpLink.setEnabled(!show);
+        forgotPasswordLink.setEnabled(!show);
+        // Hide links during loading for cleaner UX
+        signUpLink.setVisibility(show ? View.GONE : View.VISIBLE);
+        forgotPasswordLink.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

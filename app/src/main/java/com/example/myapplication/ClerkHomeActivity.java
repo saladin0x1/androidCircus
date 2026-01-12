@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ public class ClerkHomeActivity extends AppCompatActivity {
 
     private TextView welcomeText, logoutButton;
     private TextView todayCountText, pendingCountText;
+    private TextView approvalsButton;
     private RecyclerView recyclerView;
     private AppointmentsAdapter adapter;
     private SessionManager sessionManager;
@@ -40,6 +42,7 @@ public class ClerkHomeActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logoutButton);
         todayCountText = findViewById(R.id.todayCountText);
         pendingCountText = findViewById(R.id.pendingCountText);
+        approvalsButton = findViewById(R.id.approvalsButton);
         recyclerView = findViewById(R.id.appointmentsRecyclerView);
 
         welcomeText.setText(sessionManager.getUserName());
@@ -48,11 +51,10 @@ public class ClerkHomeActivity extends AppCompatActivity {
         adapter = new AppointmentsAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        logoutButton.setOnClickListener(v -> {
-            sessionManager.logout();
-            Intent intent = new Intent(ClerkHomeActivity.this, SignInActivity.class);
+        logoutButton.setOnClickListener(v -> showLogoutConfirmation());
+        approvalsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ClerkHomeActivity.this, ClerkApprovalsActivity.class);
             startActivity(intent);
-            finish();
         });
 
         loadDashboard();
@@ -60,10 +62,7 @@ public class ClerkHomeActivity extends AppCompatActivity {
     }
 
     private void loadDashboard() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getDashboard(token).enqueue(new Callback<ApiResponse<DashboardDTO>>() {
+        apiService.getDashboard().enqueue(new Callback<ApiResponse<DashboardDTO>>() {
             @Override
             public void onResponse(Call<ApiResponse<DashboardDTO>> call, Response<ApiResponse<DashboardDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -84,10 +83,7 @@ public class ClerkHomeActivity extends AppCompatActivity {
     }
 
     private void loadAppointments() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -112,5 +108,19 @@ public class ClerkHomeActivity extends AppCompatActivity {
         super.onResume();
         loadDashboard();
         loadAppointments();
+    }
+
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Déconnexion")
+                .setMessage("Voulez-vous vraiment vous déconnecter ?")
+                .setPositiveButton("Oui", (dialog, which) -> {
+                    sessionManager.logout();
+                    Intent intent = new Intent(ClerkHomeActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Non", null)
+                .show();
     }
 }

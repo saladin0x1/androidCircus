@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.api.SessionManager;
 import com.example.myapplication.api.models.ApiResponse;
 import com.example.myapplication.api.models.AppointmentDTO;
+import com.example.myapplication.utils.ErrorMessageHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class HomeActivity extends AppCompatActivity {
         welcomeText.setText("Bienvenue, " + sessionManager.getUserName());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AppointmentsAdapter(new ArrayList<>());
+        adapter = new AppointmentsAdapter(new ArrayList<>(), null, true);
+        adapter.setOnCancelClickListener(this::showCancelConfirmation);
         recyclerView.setAdapter(adapter);
 
         profileButton.setOnClickListener(v -> {
@@ -55,12 +58,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        logoutButton.setOnClickListener(v -> {
-            sessionManager.logout();
-            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        logoutButton.setOnClickListener(v -> showLogoutConfirmation());
 
         addAppointmentFab.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, CreateAppointmentActivity.class);
@@ -71,10 +69,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadAppointments() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -83,13 +78,14 @@ public class HomeActivity extends AppCompatActivity {
                         adapter.updateData(apiResponse.getData());
                     }
                 } else {
-                    Toast.makeText(HomeActivity.this, "Erreur lors du chargement des rendez-vous", Toast.LENGTH_SHORT).show();
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(HomeActivity.this, response.code(), "Erreur lors du chargement des rendez-vous");
+                    Toast.makeText(HomeActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<AppointmentDTO>>> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Erreur réseau: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Vérifiez votre connexion internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -99,5 +95,48 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         welcomeText.setText("Bienvenue, " + sessionManager.getUserName());
         loadAppointments();
+    }
+
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Déconnexion")
+                .setMessage("Voulez-vous vraiment vous déconnecter ?")
+                .setPositiveButton("Oui", (dialog, which) -> {
+                    sessionManager.logout();
+                    Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Non", null)
+                .show();
+    }
+
+    private void showCancelConfirmation(AppointmentDTO appointment) {
+        new AlertDialog.Builder(this)
+                .setTitle("Annuler le rendez-vous")
+                .setMessage("Voulez-vous vraiment annuler ce rendez-vous ?")
+                .setPositiveButton("Oui", (dialog, which) -> cancelAppointment(appointment))
+                .setNegativeButton("Non", null)
+                .show();
+    }
+
+    private void cancelAppointment(AppointmentDTO appointment) {
+        apiService.cancelAppointment(appointment.getId()).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(HomeActivity.this, "Rendez-vous annulé", Toast.LENGTH_SHORT).show();
+                    loadAppointments();
+                } else {
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(HomeActivity.this, response.code(), "Erreur lors de l'annulation");
+                    Toast.makeText(HomeActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Erreur réseau", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

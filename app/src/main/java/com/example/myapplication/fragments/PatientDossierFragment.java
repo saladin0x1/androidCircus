@@ -94,9 +94,6 @@ public class PatientDossierFragment extends Fragment {
             return;
         }
 
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
         // Show loading state
         emptyStateLayout.setVisibility(View.GONE);
         patientNameText.setText(selectedPatientName);
@@ -106,7 +103,7 @@ public class PatientDossierFragment extends Fragment {
         patientAvatarLarge.setText(initials);
 
         // Load patient details from API
-        apiService.getPatient(token, selectedPatientId).enqueue(new Callback<ApiResponse<PatientDTO>>() {
+        apiService.getPatient(selectedPatientId).enqueue(new Callback<ApiResponse<PatientDTO>>() {
             @Override
             public void onResponse(Call<ApiResponse<PatientDTO>> call, Response<ApiResponse<PatientDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -134,10 +131,7 @@ public class PatientDossierFragment extends Fragment {
     }
 
     private void loadPatientAppointments() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getAppointments(token, "all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
+        apiService.getAppointments("all").enqueue(new Callback<ApiResponse<List<AppointmentDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<AppointmentDTO>>> call, Response<ApiResponse<List<AppointmentDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {

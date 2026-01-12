@@ -18,6 +18,7 @@ import com.example.myapplication.api.models.ApiResponse;
 import com.example.myapplication.api.models.AppointmentDTO;
 import com.example.myapplication.api.models.CreateAppointmentRequest;
 import com.example.myapplication.api.models.DoctorDTO;
+import com.example.myapplication.utils.ErrorMessageHelper;
 import com.example.myapplication.utils.NotificationHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,10 +89,7 @@ public class CreateAppointmentActivity extends AppCompatActivity {
     }
 
     private void loadDoctors() {
-        String token = sessionManager.getAuthHeader();
-        if (token == null) return;
-
-        apiService.getDoctors(token).enqueue(new Callback<ApiResponse<List<DoctorDTO>>>() {
+        apiService.getDoctors().enqueue(new Callback<ApiResponse<List<DoctorDTO>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<DoctorDTO>>> call, Response<ApiResponse<List<DoctorDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -101,13 +99,14 @@ public class CreateAppointmentActivity extends AppCompatActivity {
                         setupSpinner();
                     }
                 } else {
-                    Toast.makeText(CreateAppointmentActivity.this, "Impossible de charger la liste des médecins", Toast.LENGTH_SHORT).show();
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(CreateAppointmentActivity.this, response.code(), "Impossible de charger la liste des médecins");
+                    Toast.makeText(CreateAppointmentActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<DoctorDTO>>> call, Throwable t) {
-                Toast.makeText(CreateAppointmentActivity.this, "Erreur réseau: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAppointmentActivity.this, "Vérifiez votre connexion internet", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -160,8 +159,7 @@ public class CreateAppointmentActivity extends AppCompatActivity {
             "" // notes
         );
 
-        String token = sessionManager.getAuthHeader();
-        apiService.createAppointment(token, request).enqueue(new Callback<ApiResponse<AppointmentDTO>>() {
+        apiService.createAppointment(request).enqueue(new Callback<ApiResponse<AppointmentDTO>>() {
             @Override
             public void onResponse(Call<ApiResponse<AppointmentDTO>> call, Response<ApiResponse<AppointmentDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -176,13 +174,14 @@ public class CreateAppointmentActivity extends AppCompatActivity {
                         Toast.makeText(CreateAppointmentActivity.this, "Erreur: " + response.body().getError().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                     Toast.makeText(CreateAppointmentActivity.this, "Erreur lors de la réservation", Toast.LENGTH_SHORT).show();
+                    String errorMsg = ErrorMessageHelper.getErrorMessage(CreateAppointmentActivity.this, response.code(), "Erreur lors de la réservation");
+                    Toast.makeText(CreateAppointmentActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<AppointmentDTO>> call, Throwable t) {
-                Toast.makeText(CreateAppointmentActivity.this, "Erreur réseau: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAppointmentActivity.this, "Vérifiez votre connexion internet", Toast.LENGTH_SHORT).show();
             }
         });
     }

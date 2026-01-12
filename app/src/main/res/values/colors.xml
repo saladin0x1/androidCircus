@@ -34,6 +34,8 @@
     <color name="warning">@color/anthropic_terracotta</color>
     <color name="error">#C1440E</color>
     <color name="info">@color/anthropic_brown</color>
+    <color name="pending">#F57C00</color>
+    <color name="pending_light">#FFF3E0</color>
 
     <!-- UI Element Colors -->
     <color name="divider">@color/anthropic_warm_gray</color>
