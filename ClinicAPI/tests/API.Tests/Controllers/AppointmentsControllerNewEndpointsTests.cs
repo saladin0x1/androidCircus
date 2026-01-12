@@ -276,27 +276,31 @@ public class AppointmentsControllerNewEndpointsTests : IClassFixture<TestFixture
         var time1 = DateTime.UtcNow.AddHours(24);
         var time2 = DateTime.UtcNow.AddHours(26);
 
-        _fixture.DbContext.Appointments.AddRange(
-            new Appointment
-            {
-                PatientId = patient.Patient!.Id,
-                DoctorId = doctor.Doctor!.Id,
-                AppointmentDate = time1,
-                Status = AppointmentStatus.Scheduled,
-                Reason = "First",
-                CreatedBy = patient.Id
-            },
-            new Appointment
-            {
-                PatientId = patient.Patient!.Id,
-                DoctorId = doctor.Doctor!.Id,
-                AppointmentDate = time2,
-                Status = AppointmentStatus.Scheduled,
-                Reason = "Second",
-                CreatedBy = patient.Id
-            }
-        );
+        var appointment1 = new Appointment
+        {
+            PatientId = patient.Patient!.Id,
+            DoctorId = doctor.Doctor!.Id,
+            AppointmentDate = time1,
+            Status = AppointmentStatus.Scheduled,
+            Reason = "First",
+            CreatedBy = patient.Id
+        };
+
+        var appointment2 = new Appointment
+        {
+            PatientId = patient.Patient!.Id,
+            DoctorId = doctor.Doctor!.Id,
+            AppointmentDate = time2,
+            Status = AppointmentStatus.Scheduled,
+            Reason = "Second",
+            CreatedBy = patient.Id
+        };
+
+        _fixture.DbContext.Appointments.AddRange(appointment1, appointment2);
         await _fixture.DbContext.SaveChangesAsync();
+
+        // Reload appointment1 to get its ID
+        await _fixture.DbContext.Entry(appointment1).ReloadAsync();
 
         var token = _fixture.GenerateTestToken(patient);
         SetAuthHeader(token);
@@ -308,7 +312,7 @@ public class AppointmentsControllerNewEndpointsTests : IClassFixture<TestFixture
         };
 
         // Act
-        var response = await _client.PutAsJsonAsync($"/api/appointments/{_fixture.DbContext.Appointments.First().Id}", request);
+        var response = await _client.PutAsJsonAsync($"/api/appointments/{appointment1.Id}", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

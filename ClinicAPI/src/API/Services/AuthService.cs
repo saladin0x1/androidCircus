@@ -85,7 +85,7 @@ public class AuthService
             };
         }
 
-        // Create user
+        // Create user (inactive until approved by clerk)
         var user = new User
         {
             Email = request.Email,
@@ -94,7 +94,7 @@ public class AuthService
             LastName = request.LastName,
             Phone = request.Phone,
             Role = request.Role,
-            IsActive = true
+            IsActive = false  // Requires clerk approval
         };
 
         _context.Users.Add(user);
@@ -138,8 +138,7 @@ public class AuthService
                 break;
         }
 
-        var token = _jwtService.GenerateToken(user, roleSpecificId);
-
+        // Don't return token for inactive users - they need approval first
         return new LoginResponse
         {
             Success = true,
@@ -150,9 +149,10 @@ public class AuthService
                 LastName = user.LastName,
                 Email = user.Email,
                 Role = user.Role.ToString(),
-                Token = token,
+                Token = null,  // No token until approved
                 RoleSpecificId = roleSpecificId
-            }
+            },
+            Message = "Account created successfully. Please wait for clerk approval."
         };
     }
 }

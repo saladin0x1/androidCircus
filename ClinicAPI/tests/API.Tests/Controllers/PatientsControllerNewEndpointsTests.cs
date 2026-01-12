@@ -210,4 +210,155 @@ public class PatientsControllerNewEndpointsTests : IClassFixture<TestFixture>
         Assert.True(result.Success);
         Assert.Equal("Clerk notes", result.Data);
     }
+
+    [Fact]
+    public async Task CreatePatient_AsClerk_ReturnsSuccess()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var clerk = await _fixture.CreateTestUserAsync("clerk@example.com", UserRole.Clerk);
+        var token = _fixture.GenerateTestToken(clerk);
+        SetAuthHeader(token);
+
+        var request = new CreatePatientRequest
+        {
+            Email = "newpatient@example.com",
+            Password = "Password123!",
+            FirstName = "John",
+            LastName = "Doe",
+            Phone = "555-9999",
+            DateOfBirth = DateTime.UtcNow.AddYears(-30),
+            Address = "123 Main St",
+            EmergencyContactName = "Jane Doe",
+            EmergencyContactPhone = "555-8888"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/patients", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+        Assert.Equal("newpatient@example.com", result.Data.Email);
+        Assert.Equal("John", result.Data.FirstName);
+        Assert.Equal("Doe", result.Data.LastName);
+        Assert.Equal("555-9999", result.Data.Phone);
+        Assert.Equal("123 Main St", result.Data.Address);
+    }
+
+    [Fact]
+    public async Task CreatePatient_WithExistingEmail_ReturnsBadRequest()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("existing@example.com", UserRole.Patient);
+        var clerk = await _fixture.CreateTestUserAsync("clerk@example.com", UserRole.Clerk);
+        var token = _fixture.GenerateTestToken(clerk);
+        SetAuthHeader(token);
+
+        var request = new CreatePatientRequest
+        {
+            Email = "existing@example.com",
+            Password = "Password123!",
+            FirstName = "Test",
+            LastName = "Patient"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/patients", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<PatientDTO>>(response);
+        Assert.NotNull(result);
+        Assert.False(result.Success);
+        Assert.Equal("EMAIL_EXISTS", result.Error?.Code);
+    }
+
+    [Fact]
+    public async Task CreatePatient_AsPatient_ReturnsForbidden()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var patient = await _fixture.CreateTestUserAsync("patient@example.com", UserRole.Patient);
+        var token = _fixture.GenerateTestToken(patient);
+        SetAuthHeader(token);
+
+        var request = new CreatePatientRequest
+        {
+            Email = "newpatient@example.com",
+            Password = "Password123!",
+            FirstName = "John",
+            LastName = "Doe"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/patients", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeletePatient_AsClerk_DeactivatesPatient()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var patient = await _fixture.CreateTestUserAsync("patient@example.com", UserRole.Patient);
+        var clerk = await _fixture.CreateTestUserAsync("clerk@example.com", UserRole.Clerk);
+        var token = _fixture.GenerateTestToken(clerk);
+        SetAuthHeader(token);
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/patients/{patient.Patient!.Id}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+
+        // Verify patient is deactivated
+        _fixture.DbContext.Entry(patient).Reload();
+        Assert.False(patient.IsActive);
+    }
+
+    [Fact]
+    public async Task DeletePatient_AsPatient_ReturnsForbidden()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var patient = await _fixture.CreateTestUserAsync("patient@example.com", UserRole.Patient);
+        var token = _fixture.GenerateTestToken(patient);
+        SetAuthHeader(token);
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/patients/{patient.Patient!.Id}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeletePatient_WithNonExistentId_ReturnsNotFound()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var clerk = await _fixture.CreateTestUserAsync("clerk@example.com", UserRole.Clerk);
+        var token = _fixture.GenerateTestToken(clerk);
+        SetAuthHeader(token);
+        var nonExistentId = Guid.NewGuid();
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/patients/{nonExistentId}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.False(result.Success);
+        Assert.Equal("NOT_FOUND", result.Error?.Code);
+    }
 }

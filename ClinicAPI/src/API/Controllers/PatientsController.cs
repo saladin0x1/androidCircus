@@ -287,4 +287,179 @@ public class PatientsController : ControllerBase
                 "SERVER_ERROR", "An error occurred while updating patient notes"));
         }
     }
+
+    /// <summary>
+    /// Create a new patient (Clerk only)
+    /// </summary>
+    [HttpPost]
+    [Authorize(Roles = "Clerk")]
+    public async Task<ActionResult<ApiResponse<PatientDTO>>> CreatePatient([FromBody] CreatePatientRequest request)
+    {
+        try
+        {
+            // Check if email already exists
+            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            {
+                return BadRequest(ApiResponse<PatientDTO>.ErrorResponse(
+                    "EMAIL_EXISTS", "Email already registered"));
+            }
+
+            // Create user
+            var user = new User
+            {
+                Email = request.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Phone = request.Phone,
+                Role = UserRole.Patient,
+                IsActive = true
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Create patient
+            var patient = new Patient
+            {
+                UserId = user.Id,
+                DateOfBirth = request.DateOfBirth,
+                Address = request.Address,
+                EmergencyContactName = request.EmergencyContactName,
+                EmergencyContactPhone = request.EmergencyContactPhone
+            };
+
+            _context.Patients.Add(patient);
+            await _context.SaveChangesAsync();
+
+            var dto = new PatientDTO
+            {
+                Id = patient.Id.ToString(),
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone ?? "",
+                DateOfBirth = patient.DateOfBirth,
+                Address = patient.Address,
+                EmergencyContactName = patient.EmergencyContactName,
+                EmergencyContactPhone = patient.EmergencyContactPhone,
+                DoctorNotes = patient.DoctorNotes,
+                RegistrationDate = patient.RegistrationDate
+            };
+
+            return Created(string.Empty, ApiResponse<PatientDTO>.SuccessResponse(dto));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating patient");
+            return StatusCode(500, ApiResponse<PatientDTO>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while creating patient"));
+        }
+    }
+
+    /// <summary>
+    /// Delete a patient (Clerk only) - soft delete by deactivating
+    /// </summary>
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Clerk")]
+    public async Task<ActionResult<ApiResponse<object>>> DeletePatient(string id)
+    {
+        try
+        {
+            if (!Guid.TryParse(id, out var patientId))
+            {
+                return BadRequest(ApiResponse<object>.ErrorResponse(
+                    "INVALID_ID", "Invalid patient ID"));
+            }
+
+            var patient = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == patientId);
+
+            if (patient == null)
+            {
+                return NotFound(ApiResponse<object>.ErrorResponse(
+                    "NOT_FOUND", "Patient not found"));
+            }
+
+            // Soft delete - deactivate user
+            patient.User.IsActive = false;
+            await _context.SaveChangesAsync();
+
+            return Ok(ApiResponse<object>.SuccessResponse(new
+            {
+                message = "Patient deactivated successfully"
+            }));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting patient");
+            return StatusCode(500, ApiResponse<object>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while deleting patient"));
+        }
+    }
+
+    /// <summary>
+    /// Get medical history for a patient (Doctor and Clerk only)
+    /// </summary>
+    [HttpGet("{id}/medical-history")]
+    [Authorize(Roles = "Doctor,Clerk")]
+    public async Task<ActionResult<ApiResponse<MedicalHistoryDTO>>> GetMedicalHistory(string id)
+    {
+        try
+        {
+            if (!Guid.TryParse(id, out var patientId))
+            {
+                return BadRequest(ApiResponse<MedicalHistoryDTO>.ErrorResponse(
+                    "INVALID_ID", "Invalid patient ID"));
+            }
+
+            var patient = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == patientId);
+
+            if (patient == null)
+            {
+                return NotFound(ApiResponse<MedicalHistoryDTO>.ErrorResponse(
+                    "NOT_FOUND", "Patient not found"));
+            }
+
+            // Get completed appointments as medical records
+            var appointments = await _context.Appointments
+                .Include(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                .Where(a => a.PatientId == patientId && a.Status == AppointmentStatus.Completed)
+                .OrderByDescending(a => a.AppointmentDate)
+                .ToListAsync();
+
+            var records = appointments.Select(a => new MedicalRecordDTO
+            {
+                Id = a.Id.ToString(),
+                AppointmentDate = a.AppointmentDate,
+                Reason = a.Reason,
+                DoctorNotes = a.DoctorNotes,
+                Diagnosis = null, // Can be added to Appointment model if needed
+                Prescription = null, // Can be added to Appointment model if needed
+                DoctorName = $"{a.Doctor.User.FirstName} {a.Doctor.User.LastName}",
+                DoctorSpecialization = a.Doctor.Specialization,
+                Status = a.Status.ToString()
+            }).ToList();
+
+            var history = new MedicalHistoryDTO
+            {
+                PatientId = patient.Id.ToString(),
+                PatientName = $"{patient.User.FirstName} {patient.User.LastName}",
+                Records = records,
+                TotalRecords = records.Count
+            };
+
+            return Ok(ApiResponse<MedicalHistoryDTO>.SuccessResponse(history));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching medical history");
+            return StatusCode(500, ApiResponse<MedicalHistoryDTO>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while fetching medical history"));
+        }
+    }
 }

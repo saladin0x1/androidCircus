@@ -2,22 +2,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs;
 
-public class PatientDTO
+public class DoctorDTO
 {
     public string Id { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
-    public DateTime? DateOfBirth { get; set; }
-    public string? Address { get; set; }
-    public string? EmergencyContactName { get; set; }
-    public string? EmergencyContactPhone { get; set; }
-    public string? DoctorNotes { get; set; }
-    public DateTime RegistrationDate { get; set; }
+    public string Specialization { get; set; } = string.Empty;
+    public string? LicenseNumber { get; set; }
+    public int? YearsOfExperience { get; set; }
+    public DateTime JoinedDate { get; set; }
+    public bool IsActive { get; set; }
 }
 
-public class CreatePatientRequest
+public class CreateDoctorRequest
 {
     [Required]
     [EmailAddress]
@@ -34,24 +33,21 @@ public class CreatePatientRequest
 
     public string? Phone { get; set; }
 
-    public DateTime? DateOfBirth { get; set; }
+    [Required]
+    public string Specialization { get; set; } = string.Empty;
 
-    public string? Address { get; set; }
+    public string? LicenseNumber { get; set; }
 
-    public string? EmergencyContactName { get; set; }
-
-    public string? EmergencyContactPhone { get; set; }
+    public int? YearsOfExperience { get; set; }
 }
 
-public class UpdatePatientRequest
+public class UpdateDoctorRequest
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Phone { get; set; }
-    public DateTime? DateOfBirth { get; set; }
-}
-
-public class UpdatePatientNotesRequest
-{
-    public string Notes { get; set; } = string.Empty;
+    public string? Specialization { get; set; }
+    public string? LicenseNumber { get; set; }
+    public int? YearsOfExperience { get; set; }
+    public bool? IsActive { get; set; }
 }

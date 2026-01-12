@@ -251,4 +251,206 @@ public class AuthControllerTests : IClassFixture<TestFixture>
         var result = await response.Content.ReadFromJsonAsync<object>();
         Assert.NotNull(result);
     }
+
+    [Fact]
+    public async Task ForgotPassword_WithExistingEmail_ReturnsSuccess()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("test@example.com", UserRole.Patient);
+
+        var request = new ForgotPasswordRequest
+        {
+            Email = "test@example.com"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/forgot-password", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+    }
+
+    [Fact]
+    public async Task ForgotPassword_WithNonExistentEmail_ReturnsSuccess_PreventsEnumeration()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+
+        var request = new ForgotPasswordRequest
+        {
+            Email = "nonexistent@example.com"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/forgot-password", request);
+
+        // Assert - Should still return success to prevent email enumeration
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+    }
+
+    [Fact]
+    public async Task ResetPassword_WithValidData_ReturnsSuccess()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("test@example.com", UserRole.Patient, "OldPassword123!");
+
+        var request = new ResetPasswordRequest
+        {
+            Email = "test@example.com",
+            NewPassword = "NewPassword123!",
+            ConfirmPassword = "NewPassword123!"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/reset-password", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+
+        // Verify password was changed by trying to login with new password
+        var loginRequest = new LoginRequest
+        {
+            Email = "test@example.com",
+            Password = "NewPassword123!"
+        };
+        var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", loginRequest);
+        Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task ResetPassword_WithMismatchedPasswords_ReturnsBadRequest()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("test@example.com", UserRole.Patient);
+
+        var request = new ResetPasswordRequest
+        {
+            Email = "test@example.com",
+            NewPassword = "NewPassword123!",
+            ConfirmPassword = "DifferentPassword123!"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/reset-password", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.False(result.Success);
+        Assert.Equal("PASSWORD_MISMATCH", result.Error?.Code);
+    }
+
+    [Fact]
+    public async Task ResetPassword_WithShortPassword_ReturnsBadRequest()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        await _fixture.CreateTestUserAsync("test@example.com", UserRole.Patient);
+
+        var request = new ResetPasswordRequest
+        {
+            Email = "test@example.com",
+            NewPassword = "12345",
+            ConfirmPassword = "12345"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/reset-password", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.False(result.Success);
+        Assert.Equal("PASSWORD_TOO_SHORT", result.Error?.Code);
+    }
+
+    [Fact]
+    public async Task ResetPassword_WithNonExistentEmail_ReturnsNotFound()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+
+        var request = new ResetPasswordRequest
+        {
+            Email = "nonexistent@example.com",
+            NewPassword = "NewPassword123!",
+            ConfirmPassword = "NewPassword123!"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/reset-password", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var result = await DeserializeResponse<ApiResponse<object>>(response);
+        Assert.NotNull(result);
+        Assert.False(result.Success);
+        Assert.Equal("USER_NOT_FOUND", result.Error?.Code);
+    }
+
+    [Fact]
+    public async Task RefreshToken_WithValidToken_ReturnsNewToken()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        var user = await _fixture.CreateTestUserAsync("test@example.com", UserRole.Patient);
+
+        // First login to get a token
+        var loginRequest = new LoginRequest
+        {
+            Email = "test@example.com",
+            Password = "Password123!"
+        };
+        var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", loginRequest);
+        var loginResult = await DeserializeResponse<LoginResponse>(loginResponse);
+        var originalToken = loginResult.Data.Token;
+
+        // Set auth header for refresh
+        _client.DefaultRequestHeaders.Clear();
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {originalToken}");
+
+        var refreshRequest = new RefreshTokenRequest();
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/refresh", refreshRequest);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await DeserializeResponse<LoginResponse>(response);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+        Assert.NotNull(result.Data.Token);
+        // New token should be different from original
+        Assert.NotEqual(originalToken, result.Data.Token);
+    }
+
+    [Fact]
+    public async Task RefreshToken_WithoutAuth_ReturnsUnauthorized()
+    {
+        // Arrange
+        await _fixture.ResetDatabaseAsync();
+        _client.DefaultRequestHeaders.Clear();
+
+        var refreshRequest = new RefreshTokenRequest();
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/refresh", refreshRequest);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
 }
