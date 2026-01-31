@@ -251,4 +251,145 @@ public class UsersController : ControllerBase
                 "SERVER_ERROR", "An error occurred while updating password"));
         }
     }
+
+    /// <summary>
+    /// Get pending users (Clerk only)
+    /// </summary>
+    [HttpGet("pending")]
+    [Authorize(Roles = "Clerk")]
+    public async Task<ActionResult<ApiResponse<List<PendingUserDTO>>>> GetPendingUsers()
+    {
+        try
+        {
+            var pendingUsers = await _context.Users
+                .Where(u => !u.IsActive)
+                .OrderBy(u => u.CreatedAt)
+                .ToListAsync();
+
+            var dtoList = pendingUsers.Select(u => new PendingUserDTO
+            {
+                Id = u.Id.ToString(),
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                Role = u.Role.ToString(),
+                CreatedAt = u.CreatedAt
+            }).ToList();
+
+            return Ok(ApiResponse<List<PendingUserDTO>>.SuccessResponse(dtoList));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching pending users");
+            return StatusCode(500, ApiResponse<List<PendingUserDTO>>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while fetching pending users"));
+        }
+    }
+
+    /// <summary>
+    /// Approve a pending user (Clerk only)
+    /// </summary>
+    [HttpPost("{id}/approve")]
+    [Authorize(Roles = "Clerk")]
+    public async Task<ActionResult<ApiResponse<object>>> ApproveUser(string id)
+    {
+        try
+        {
+            if (!Guid.TryParse(id, out var userGuid))
+            {
+                return BadRequest(ApiResponse<object>.ErrorResponse(
+                    "INVALID_ID", "Invalid user ID"));
+            }
+
+            var user = await _context.Users.FindAsync(userGuid);
+
+            if (user == null)
+            {
+                return NotFound(ApiResponse<object>.ErrorResponse(
+                    "NOT_FOUND", "User not found"));
+            }
+
+            if (user.IsActive)
+            {
+                return BadRequest(ApiResponse<object>.ErrorResponse(
+                    "ALREADY_ACTIVE", "User is already active"));
+            }
+
+            // Activate the user
+            user.IsActive = true;
+            user.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return Ok(ApiResponse<object>.SuccessResponse(new
+            {
+                message = "User approved successfully",
+                userId = user.Id.ToString()
+            }));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error approving user");
+            return StatusCode(500, ApiResponse<object>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while approving user"));
+        }
+    }
+
+    /// <summary>
+    /// Reject a pending user (Clerk only)
+    /// </summary>
+    [HttpPost("{id}/reject")]
+    [Authorize(Roles = "Clerk")]
+    public async Task<ActionResult<ApiResponse<object>>> RejectUser(string id)
+    {
+        try
+        {
+            if (!Guid.TryParse(id, out var userGuid))
+            {
+                return BadRequest(ApiResponse<object>.ErrorResponse(
+                    "INVALID_ID", "Invalid user ID"));
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Patient)
+                .Include(u => u.Doctor)
+                .Include(u => u.Clerk)
+                .FirstOrDefaultAsync(u => u.Id == userGuid);
+
+            if (user == null)
+            {
+                return NotFound(ApiResponse<object>.ErrorResponse(
+                    "NOT_FOUND", "User not found"));
+            }
+
+            // Delete role-specific entity
+            if (user.Patient != null)
+            {
+                _context.Patients.Remove(user.Patient);
+            }
+            else if (user.Doctor != null)
+            {
+                _context.Doctors.Remove(user.Doctor);
+            }
+            else if (user.Clerk != null)
+            {
+                _context.Clerks.Remove(user.Clerk);
+            }
+
+            // Delete the user
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(ApiResponse<object>.SuccessResponse(new
+            {
+                message = "User rejected successfully",
+                userId = userGuid.ToString()
+            }));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error rejecting user");
+            return StatusCode(500, ApiResponse<object>.ErrorResponse(
+                "SERVER_ERROR", "An error occurred while rejecting user"));
+        }
+    }
 }

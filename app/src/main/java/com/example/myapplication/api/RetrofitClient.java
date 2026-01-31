@@ -9,10 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 
-    // UNIVERSAL CONFIGURATION:
-    // Use your machine's LAN IP address here.
-    // Works for: Emulator, Real Device (WiFi), and prepares for VPS IP.
-    private static final String BASE_URL = "http://192.168.1.189:5000/api/";
+    // PRODUCTION API URL (Azure)
+    private static final String BASE_URL = "https://clinic-api-salaho-24.azurewebsites.net/api/";
 
     private static Retrofit retrofit = null;
     private static Context appContext = null;
