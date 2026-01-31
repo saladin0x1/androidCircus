@@ -4,6 +4,7 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -22,31 +23,74 @@ public class DoctorsController : ControllerBase
     }
 
     /// <summary>
-    /// List all doctors (available to all authenticated users)
+    /// List doctors filtered by role:
+    /// - Doctors see only themselves
+    /// - Patients see all doctors (for booking)
+    /// - Clerks see all doctors (admin access)
     /// </summary>
     [HttpGet]
     public async Task<ActionResult<ApiResponse<List<DoctorDTO>>>> GetDoctors()
     {
         try
         {
-            var doctors = await _context.Doctors
-                .Include(d => d.User)
-                .Select(d => new DoctorDTO
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            List<DoctorDTO> doctors;
+
+            if (userRole == "Doctor")
+            {
+                // Doctor sees only themselves
+                if (!Guid.TryParse(userId, out var userGuid))
                 {
-                    Id = d.Id.ToString(),
-                    Email = d.User.Email,
-                    FirstName = d.User.FirstName,
-                    LastName = d.User.LastName,
-                    Phone = d.User.Phone ?? "",
-                    Specialization = d.Specialization,
-                    LicenseNumber = d.LicenseNumber,
-                    YearsOfExperience = d.YearsOfExperience,
-                    JoinedDate = d.JoinedDate,
-                    IsActive = d.User.IsActive
-                })
-                .OrderBy(d => d.LastName)
-                .ThenBy(d => d.FirstName)
-                .ToListAsync();
+                    return BadRequest(ApiResponse<List<DoctorDTO>>.ErrorResponse(
+                        "INVALID_TOKEN", "Invalid token"));
+                }
+
+                var doctor = await _context.Doctors
+                    .Include(d => d.User)
+                    .FirstOrDefaultAsync(d => d.UserId == userGuid);
+
+                doctors = doctor != null ? new List<DoctorDTO>
+                {
+                    new DoctorDTO
+                    {
+                        Id = doctor.Id.ToString(),
+                        Email = doctor.User.Email,
+                        FirstName = doctor.User.FirstName,
+                        LastName = doctor.User.LastName,
+                        Phone = doctor.User.Phone ?? "",
+                        Specialization = doctor.Specialization,
+                        LicenseNumber = doctor.LicenseNumber,
+                        YearsOfExperience = doctor.YearsOfExperience,
+                        JoinedDate = doctor.JoinedDate,
+                        IsActive = doctor.User.IsActive
+                    }
+                } : new List<DoctorDTO>();
+            }
+            else
+            {
+                // Patient and Clerk see all active doctors
+                doctors = await _context.Doctors
+                    .Include(d => d.User)
+                    .Where(d => d.User.IsActive)
+                    .Select(d => new DoctorDTO
+                    {
+                        Id = d.Id.ToString(),
+                        Email = d.User.Email,
+                        FirstName = d.User.FirstName,
+                        LastName = d.User.LastName,
+                        Phone = d.User.Phone ?? "",
+                        Specialization = d.Specialization,
+                        LicenseNumber = d.LicenseNumber,
+                        YearsOfExperience = d.YearsOfExperience,
+                        JoinedDate = d.JoinedDate,
+                        IsActive = d.User.IsActive
+                    })
+                    .OrderBy(d => d.LastName)
+                    .ThenBy(d => d.FirstName)
+                    .ToListAsync();
+            }
 
             return Ok(ApiResponse<List<DoctorDTO>>.SuccessResponse(doctors));
         }

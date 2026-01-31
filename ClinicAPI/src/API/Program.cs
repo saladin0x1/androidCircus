@@ -13,8 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Configure Database
+// For Azure App Service, use persistent /home directory
+var dbPath = Environment.GetEnvironmentVariable("AZURE_WEB_APP_DEPLOYMENT") != null
+    ? "Data Source=/home/clinic.db"
+    : builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ClinicDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(dbPath));
 
 // Register custom services
 builder.Services.AddScoped<JwtService>();

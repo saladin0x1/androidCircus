@@ -53,7 +53,8 @@
         android:background="@drawable/spinner_background"
         android:paddingStart="16dp"
         android:paddingEnd="40dp"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="24dp"
+        android:spinnerMode="dialog" />
 
     <!-- Date Section -->
     <TextView
